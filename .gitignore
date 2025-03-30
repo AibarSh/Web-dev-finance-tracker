@@ -1,0 +1,54 @@
+# 🚀 General OS files
+.DS_Store
+Thumbs.db
+
+# 🚀 Python Virtual Environment (Django)
+env/
+venv/
+*.pyc
+*.pyo
+*.pyd
+__pycache__/
+*.swp
+*.swo
+*.swn
+
+# 🚀 Django Secrets and Migrations
+*.sqlite3
+db.sqlite3
+*.log
+*.pot
+*.pyc
+*.pyo
+*.db
+/media/
+/staticfiles/
+.env
+*.pem
+instance/
+migrations/**/000*.py  # Ignore initial migrations
+
+# 🚀 Node Modules (Angular)
+node_modules/
+npm-debug.log
+package-lock.json
+yarn.lock
+
+# 🚀 Angular Build Files
+dist/
+tmp/
+out-tsc/
+coverage/
+.angular/
+*.tgz
+
+# 🚀 Angular IDE and Editor Specific
+.vscode/
+.idea/
+*.iml
+*.sublime-workspace
+*.sublime-project
+
+# 🚀 Misc
+*.bak
+*.tmp

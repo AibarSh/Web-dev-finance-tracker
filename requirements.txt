@@ -1,0 +1,8 @@
+Django>=4.2  # The latest stable Django version
+djangorestframework>=3.14  # Django REST framework for APIs
+djangorestframework-simplejwt>=5.3  # JWT authentication for DRF
+django-cors-headers>=4.3  # Handles CORS issues
+channels>=4.0  # For Django Channels (WebSockets)
+channels-redis>=4.1  # Redis support for Django Channels
+gunicorn>=21.2  # Production WSGI server (optional)
+
