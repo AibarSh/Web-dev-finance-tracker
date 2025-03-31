@@ -1,9 +1,5 @@
-# Web-dev_Finance_tracker
-Web development project: Finance tracker
-Group members: Асылбек Ансар  23B31173, Шакеев Айбар 23B031882, Акмурзаев Жанарыс 23B030280
-
-
 # Finance Tracker (Angular + Django)
+Group members: Асылбек Ансар  23B31173, Шакеев Айбар 23B031882, Акмурзаев Жанарыс 23B030280
 
 This is a full-stack web application called **Finance Tracker**, which allows users to:
 - **Manage their finances**
