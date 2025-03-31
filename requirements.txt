@@ -5,4 +5,4 @@ django-cors-headers>=4.3  # Handles CORS issues
 channels>=4.0  # For Django Channels (WebSockets)
 channels-redis>=4.1  # Redis support for Django Channels
 gunicorn>=21.2  # Production WSGI server (optional)
-
+psycopg2>=2.9  # PostgreSQL adapter for Python (optional, if using PostgreSQL)
