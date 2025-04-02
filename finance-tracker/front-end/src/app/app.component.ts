@@ -1,12 +1,13 @@
 import { Component } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { BarChartComponent } from './components/bar-chart/bar-chart/bar-chart.component';
-import { PieChartComponent } from './components/pie-chart/pie-chart/pie-chart.component';
+import { RouterOutlet } from '@angular/router';
+
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [CommonModule,BarChartComponent,PieChartComponent],
+  imports: [RouterOutlet],
   templateUrl: './app.component.html',
-  styleUrls: ['./app.component.css']
+  styleUrl: './app.component.css'
 })
-export class AppComponent {}
+export class AppComponent {
+  title = 'finance-tracker-app';
+}
