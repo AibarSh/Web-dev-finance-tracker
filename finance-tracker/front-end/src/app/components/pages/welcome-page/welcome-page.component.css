@@ -1,0 +1,130 @@
+/* Header Styles */
+header {
+    display: flex;
+    flex-direction: row;
+    background-color: var(--dark-secondary);
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 20px;
+}
+
+/* SVG Icon (Home) */
+header svg {
+    padding: 0 20px;
+    transition: transform 0.2s ease-in-out;
+}
+
+header svg:hover {
+    cursor: pointer;
+    transform: scale(1.1); /* Slight zoom effect */
+}
+
+/* Account Buttons */
+.account-buttons {
+    display: flex;
+    gap: 16px;
+}
+
+.account-button {
+    background-color: transparent;
+    color: white;
+    border: 2px solid transparent;
+    font-size: 18px;
+    height: 56px;
+    padding: 0 24px;
+    text-transform: uppercase;
+    border-radius: 28px;
+    transition: all 0.3s ease-in-out;
+    position: relative;
+}
+
+.account-button span {
+    position: relative;
+    z-index: 1;
+}
+
+/* Hover Effect for Buttons */
+.account-button:hover {
+    cursor: pointer;
+    background-color: var(--primary);
+    color: var(--dark);
+    border-color: var(--primary);
+}
+
+/* Login Button Hover */
+.login-button:hover {
+    background-color: var(--primary-light);
+    color: var(--dark);
+}
+
+/* Register Button Hover */
+.register-button:hover {
+    background-color: var(--secondary);
+    color: var(--dark);
+}
+
+/* Active state animation for buttons */
+.account-button:active {
+    transform: scale(0.98);
+}
+
+/* Welcome Section */
+main {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background-color: var(--light-background);
+    color: var(--dark);
+    text-align: center;
+}
+
+/* Welcome Message */
+.welcome-message {
+    font-family: 'Roboto', sans-serif;
+    padding: 20px;
+    border-radius: 12px;
+    background-color: var(--light);
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+    animation: fadeIn 1s ease-in-out;
+}
+
+/* Animation for fading in the welcome message */
+@keyframes fadeIn {
+    0% {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    100% {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Styling for heading and paragraph */
+.welcome-message h1 {
+    font-size: 36px;
+    font-weight: 700;
+    margin-bottom: 16px;
+}
+
+.welcome-message p {
+    font-size: 18px;
+    margin-bottom: 20px;
+    line-height: 1.6;
+    color: var(--dark-secondary);
+}
+
+/* Custom Color Variables */
+:root {
+    --dark-secondary: #2d2d2d;
+    --dark: #1c1c1c;
+    --primary: #3a8dff;
+    --secondary: #ff6347;
+    --primary-light: #a2c8ff;
+    --white: #ffffff;
+    --dark-background: #121212;
+    --light-background: #f4f4f4;
+    --light: #ffffff;
+    --dark-secondary-hover: #444444;
+}

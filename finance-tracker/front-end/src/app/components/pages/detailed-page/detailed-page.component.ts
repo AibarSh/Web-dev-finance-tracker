@@ -4,8 +4,8 @@ import { NgFor } from '@angular/common';
 
 @Component({
   selector: 'app-pages',
-  templateUrl: './pages.component.html',
-  styleUrls: ['./pages.component.css'],
+  templateUrl: './detailed-page.component.html',
+  styleUrls: ['./detailed-page.component.css'],
   imports: [NgFor]
 })
 export class PagesComponent implements OnInit {

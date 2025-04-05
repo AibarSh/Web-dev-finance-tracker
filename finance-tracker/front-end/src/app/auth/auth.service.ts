@@ -1,44 +1,80 @@
-import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { BehaviorSubject, Observable } from 'rxjs';
-import { catchError } from 'rxjs/operators';
+import { inject, Injectable } from '@angular/core';
+import { catchError, tap, throwError } from 'rxjs';
+import { TokenResponse, UserLogin, UserRegistration } from './auth.interface';
+import { Router } from '@angular/router';
+import { CookieService } from 'ngx-cookie-service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
-  private apiUrl = 'http://127.0.0.1:8000/api/auth/'; // Путь к API на бэкенде
-  private tokenSubject = new BehaviorSubject<string | null>(null);
+  http : HttpClient = inject(HttpClient);
+  router : Router = inject(Router);
+  cookie : CookieService = inject(CookieService);
 
-  constructor(private http: HttpClient) {}
+  apiUrl : string = 'localhost:0000/auth/'
+  accessToken : string | null = '';
+  refreshToken : string | null= ''; //it should redirect us back to the login page after rega
 
-  login(username: string, password: string): Observable<any> {
-    return this.http.post<any>(`${this.apiUrl}login/`, { username, password }).pipe(
-      catchError(error => {
-        throw error;
-      })
+  registered : boolean = false;
+
+  isRegistered() : boolean {
+    return this.registered;
+  }
+
+  isAuthenticated() : boolean {
+    if (!this.accessToken) {
+      this.accessToken = this.cookie.get('accessToken');
+      this.refreshToken = this.cookie.get('refreshToken');
+    }
+    return !!this.accessToken; 
+  }
+
+  register(payload: UserRegistration) {
+    return this.http.post(this.apiUrl, payload).pipe( //TODO:  add actual url later
+      tap(
+        () => this.registered = true
+      )
     );
   }
 
-  register(username: string, password: string): Observable<any> {
-    return this.http.post<any>(`${this.apiUrl}register/`, { username, password }).pipe(
-      catchError(error => {
-        throw error;
+  login(payload: UserLogin) {
+    return this.http.post<TokenResponse>(this.apiUrl, payload) //TODO: add actual url later
+      .pipe(
+        tap(res => {
+          this.saveTokens(res);
+        })
+      );
+  }
+
+  refreshAuthToken() {
+    return this.http.post<TokenResponse>(`${this.apiUrl}refresh`, { //TODO: add actual url later
+      refresh_token: this.refreshToken
+    }).pipe(
+      tap(
+        res => this.saveTokens(res)
+      ),
+      catchError(err => {
+        this.logout();
+        return throwError(() => err);
       })
-    );
+    )
   }
 
-  setToken(token: string): void {
-    this.tokenSubject.next(token);
-    localStorage.setItem('auth_token', token);
+  logout() {
+    this.cookie.deleteAll();
+    this.accessToken = null;
+    this.refreshToken = null;
+    this.router.navigate(['/login']);
   }
 
-  getToken(): string | null {
-    return this.tokenSubject.value || localStorage.getItem('auth_token');
+  saveTokens(res: TokenResponse) {
+    this.accessToken = res.access;
+    this.refreshToken = res.refresh;
+
+    this.cookie.set('accessToken', this.accessToken);
+    this.cookie.set('refreshToken', this.refreshToken);
   }
 
-  logout(): void {
-    this.tokenSubject.next(null);
-    localStorage.removeItem('auth_token');
-  }
 }
