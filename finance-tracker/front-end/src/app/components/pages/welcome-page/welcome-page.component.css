@@ -2,16 +2,18 @@
 header {
     display: flex;
     flex-direction: row;
-    background-color: var(--dark-secondary);
-    justify-content: space-between;
+    background-color: black;
+    justify-content: flex-end;
     align-items: center;
     padding: 10px 20px;
 }
 
 /* SVG Icon (Home) */
 header svg {
-    padding: 0 20px;
+    padding: 10 10px;
     transition: transform 0.2s ease-in-out;
+    size: 24px;
+    margin-right: 20px;
 }
 
 header svg:hover {
@@ -22,7 +24,8 @@ header svg:hover {
 /* Account Buttons */
 .account-buttons {
     display: flex;
-    gap: 16px;
+    justify-content: center;
+    gap: 15px;
 }
 
 .account-button {
@@ -71,12 +74,16 @@ header svg:hover {
 /* Welcome Section */
 main {
     display: flex;
+    flex-direction: row;
     justify-content: center;
     align-items: center;
     height: 100vh;
-    background-color: var(--light-background);
     color: var(--dark);
     text-align: center;
+    background-image: url('../../../../../public/freepik__adjust__38487.png');
+    background-size: cover;         /* Cover the screen while keeping aspect ratio */
+    background-position: center;    /* Center the image */
+    background-repeat: no-repeat;   /* Don’t repeat it */
 }
 
 /* Welcome Message */
