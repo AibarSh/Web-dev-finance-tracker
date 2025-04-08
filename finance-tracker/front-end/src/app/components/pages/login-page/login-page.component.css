@@ -40,17 +40,18 @@
 
 .login-button {
     font-size: 16px;
-    background-color: var(--primary);
+    background-color: black;
+    color:white;
     margin: 20px 0;
     width: 200px;
     border-radius: 12px;
     padding: 12px;
     transition: all 0.2s ease-in-out;
-    border: 1px solid var(--white);
+    border: 1px solid white;
 }
 
 .login-button:hover {
-    background-color: var(--secondary);
+    background-color: rgb(43, 43, 43);
 }
 
 .login-button:focus {
