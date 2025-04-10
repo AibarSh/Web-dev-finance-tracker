@@ -1,6 +1,7 @@
 {
   "dependencies": {
     "@angular/platform-browser": "^19.2.4",
-    "chart.js": "^4.4.8"
+    "chart.js": "^4.4.8",
+    "ngx-cookie-service": "^19.1.2"
   }
 }
