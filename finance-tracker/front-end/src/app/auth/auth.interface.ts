@@ -4,8 +4,8 @@ export interface TokenResponse {
 }
 
 export interface UserLogin {
-    username: string,
-    password: string
+        email: string | null | undefined; // Разрешаем null и undefined
+        password: string | null | undefined; // Разрешаем null и undefined    
 }
 
 export interface UserRegistration extends UserLogin {
