@@ -9,60 +9,70 @@ import { CookieService } from 'ngx-cookie-service';
   providedIn: 'root'
 })
 export class AuthService {
-  http : HttpClient = inject(HttpClient);
-  router : Router = inject(Router);
-  cookie : CookieService = inject(CookieService);
+  http: HttpClient = inject(HttpClient);
+  router: Router = inject(Router);
+  cookie: CookieService = inject(CookieService);
 
-  apiUrl : string = 'localhost:0000/auth/'
-  accessToken : string | null = '';
-  refreshToken : string | null= ''; //it should redirect us back to the login page after rega
+  apiUrl: string = 'http://127.0.0.1:8000/api/';
+  accessToken: string | null = '';
+  refreshToken: string | null = '';
 
-  registered : boolean = false;
+  registered: boolean = false;
 
-  isRegistered() : boolean {
+  isRegistered(): boolean {
     return this.registered;
   }
 
-  isAuthenticated() : boolean {
+  isAuthenticated(): boolean {
     if (!this.accessToken) {
       this.accessToken = this.cookie.get('accessToken');
       this.refreshToken = this.cookie.get('refreshToken');
     }
-    return !!this.accessToken; 
+    return !!this.accessToken;
   }
 
   register(payload: UserRegistration) {
-    return this.http.post(this.apiUrl, payload).pipe( //TODO:  add actual url later
-      tap(
-        () => this.registered = true
-      )
+    return this.http.post(`${this.apiUrl}register/`, payload).pipe(
+      tap(() => this.registered = true),
+      catchError(err => {
+        console.error('Registration failed', err);
+        return throwError(() => err); // Если регистрация не прошла
+      })
     );
   }
 
   login(payload: UserLogin) {
-    return this.http.post<TokenResponse>(this.apiUrl, payload) //TODO: add actual url later
-      .pipe(
-        tap(res => {
-          this.saveTokens(res);
-        })
-      );
+    console.log('Login request:', payload); 
+
+    return this.http.post<TokenResponse>(`${this.apiUrl}login/`, payload).pipe(
+      tap(res => {
+        console.log('Login success:', res); // Логируем успешный ответ
+        this.saveTokens(res);
+      }),
+      catchError(err => {
+        console.error('Login failed:', err); // Логируем ошибку
+        return throwError(() => err); // Ретранслируем ошибку
+      })
+    );
   }
 
   refreshAuthToken() {
-    return this.http.post<TokenResponse>(`${this.apiUrl}refresh`, { //TODO: add actual url later
-      refresh_token: this.refreshToken
+    return this.http.post<TokenResponse>(`${this.apiUrl}token/refresh/`, {
+      refresh: this.refreshToken
     }).pipe(
-      tap(
-        res => this.saveTokens(res)
-      ),
+      tap(res => this.saveTokens(res)),
       catchError(err => {
         this.logout();
         return throwError(() => err);
       })
-    )
+    );
   }
 
   logout() {
+    this.http.post(`${this.apiUrl}token/logout/`, {
+      refresh: this.refreshToken
+    }).subscribe(); // Не важно, что вернёт сервер, но это для завершения сессии
+
     this.cookie.deleteAll();
     this.accessToken = null;
     this.refreshToken = null;
@@ -76,5 +86,4 @@ export class AuthService {
     this.cookie.set('accessToken', this.accessToken);
     this.cookie.set('refreshToken', this.refreshToken);
   }
-
 }

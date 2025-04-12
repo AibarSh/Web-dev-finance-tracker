@@ -86,9 +86,9 @@ WSGI_APPLICATION = 'backend.wsgi.application'
 DATABASES = {
     "default": {
         "ENGINE": "django.db.backends.postgresql",
-        "NAME": "mydatabase",
+        "NAME": "finance_tracker_db",
         "USER": "postgres",
-        "PASSWORD": "postgres",
+        "PASSWORD": "admin",
         "HOST": "localhost",
         "PORT": "5432",
     }

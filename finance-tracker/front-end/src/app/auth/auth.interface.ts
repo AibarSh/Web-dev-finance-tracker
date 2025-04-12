@@ -10,4 +10,6 @@ export interface UserLogin {
 
 export interface UserRegistration extends UserLogin {
     email: string
+    password: string
+    username: string
 }

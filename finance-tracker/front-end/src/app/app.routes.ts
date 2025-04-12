@@ -18,12 +18,15 @@ export const routes: Routes = [
                 path: 'register',
                 component: RegistrationPageComponent 
             },
+
+
+
         ]
     },
 
     {
         path: 'main',
         component: MainPageComponent,
-        canActivate: [canActivateAuth]
+    //    canActivate: [canActivateAuth]
     }
 ];
