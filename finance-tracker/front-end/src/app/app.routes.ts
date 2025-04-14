@@ -16,7 +16,7 @@ export const routes: Routes = [
             },
             {
                 path: 'register',
-                component: RegistrationPageComponent 
+                component: RegistrationPageComponent
             },
 
 
@@ -27,6 +27,6 @@ export const routes: Routes = [
     {
         path: 'main',
         component: MainPageComponent,
-    //    canActivate: [canActivateAuth]
+       canActivate: [canActivateAuth]
     }
 ];
