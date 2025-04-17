@@ -7,7 +7,7 @@ import { Router, RouterLink } from '@angular/router';
   selector: 'app-login-page',
   standalone: true,
   imports: [
-    FormsModule, 
+    FormsModule,
     ReactiveFormsModule,
     RouterLink
   ],
@@ -28,7 +28,7 @@ export class LoginPageComponent {
       //@ts-ignore
       this.authService.login(this.form.value).subscribe(
         res => {
-          this.router.navigate(['']);
+          this.router.navigate(['/main']);
           console.log(res);
         }
       )
