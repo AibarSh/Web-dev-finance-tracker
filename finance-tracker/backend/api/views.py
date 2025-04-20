@@ -2,36 +2,23 @@ from django.shortcuts import render
 from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
 from django.urls import path
 from django.contrib.auth import authenticate
-from .serializers import TransactionSerializer, UserSerializer
+from .serializers import  UserSerializer
 from rest_framework.authtoken.models import Token
 
-from rest_framework import viewsets, generics, status
+from rest_framework import viewsets, generics, status, permissions
 from rest_framework.generics import GenericAPIView
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.views import APIView
 from rest_framework.response import Response
-from .models import Page, Block,Transaction, UserSession
-from .serializers import PageSerializer, BlockSerializer, LoginSerializer
+from .models import UserSession, Asset, Transaction, Goal, GoalTransaction
+from .serializers import AssetSerializer, TransactionSerializer, GoalSerializer, GoalTransactionSerializer
+from .serializers import LoginSerializer
 from django.utils import timezone
 
 urlpatterns = [
     path('api/token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
     path('api/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
 ]
-
-
-class PageViewSet(viewsets.ModelViewSet):
-    queryset = Page.objects.all()
-    serializer_class = PageSerializer
-
-class BlockViewSet(viewsets.ModelViewSet):
-    queryset = Block.objects.all()
-    serializer_class = BlockSerializer
-
-class TransactionViewSet(viewsets.ModelViewSet):
-    queryset = Transaction.objects.all()
-    serializer_class = TransactionSerializer
-    permission_classes = [IsAuthenticated]
 
 class RegisterView(generics.CreateAPIView):
     serializer_class = UserSerializer
@@ -109,3 +96,57 @@ class LogoutView(APIView):
         except UserSession.DoesNotExist:
             return Response({"error": "No active session found"}, 
                           status=status.HTTP_400_BAD_REQUEST)
+        
+
+
+class AssetViewSet(viewsets.ModelViewSet):
+    queryset = Asset.objects.all()
+    serializer_class = AssetSerializer
+    permission_classes = [permissions.IsAuthenticated]
+
+    def get_queryset(self):
+        return Asset.objects.filter(user=self.request.user)
+
+    def perform_create(self, serializer):
+        serializer.save(user=self.request.user)
+
+
+class TransactionViewSet(viewsets.ModelViewSet):
+    queryset = Transaction.objects.all()
+    serializer_class = TransactionSerializer
+    permission_classes = [permissions.IsAuthenticated]
+
+    def get_queryset(self):
+        return Transaction.objects.filter(user=self.request.user)
+
+    def perform_create(self, serializer):
+        serializer.save(user=self.request.user)
+
+
+class GoalViewSet(viewsets.ModelViewSet):
+    queryset = Goal.objects.all()
+    serializer_class = GoalSerializer
+    permission_classes = [permissions.IsAuthenticated]
+
+    def get_queryset(self):
+        return Goal.objects.filter(user=self.request.user)
+
+    def perform_create(self, serializer):
+        serializer.save(user=self.request.user)
+
+
+class GoalTransactionViewSet(viewsets.ModelViewSet):
+    queryset = GoalTransaction.objects.all()
+    serializer_class = GoalTransactionSerializer
+    permission_classes = [permissions.IsAuthenticated]
+
+    def get_queryset(self):
+        # Only return transactions related to the user's goals
+        return GoalTransaction.objects.filter(goal__user=self.request.user)
+
+    def perform_create(self, serializer):
+        # Make sure user owns the goal
+        goal = serializer.validated_data['goal']
+        if goal.user != self.request.user:
+            raise PermissionError("You do not own this goal.")
+        serializer.save()

@@ -1,11 +1,12 @@
 from django.urls import path, include
 from rest_framework.routers import DefaultRouter
-from .views import PageViewSet, BlockViewSet, TransactionViewSet, RegisterView, LoginView, LogoutView
+from .views import RegisterView, LoginView, LogoutView, AssetViewSet, TransactionViewSet, GoalViewSet, GoalTransactionViewSet
 
 router = DefaultRouter()
-router.register(r'pages', PageViewSet)
-router.register(r'blocks', BlockViewSet)
+router.register(r'assets', AssetViewSet)
 router.register(r'transactions', TransactionViewSet)
+router.register(r'goals', GoalViewSet)
+router.register(r'goal-transactions', GoalTransactionViewSet)
 
 urlpatterns = [
     path('', include(router.urls)),

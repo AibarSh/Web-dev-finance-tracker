@@ -4,33 +4,7 @@ from datetime import date
 from django.utils import timezone
 from django.contrib.auth.models import AbstractBaseUser, BaseUserManager, PermissionsMixin
 
-class Workspace(models.Model):
-    name = models.CharField(max_length=255)
-    owner = models.ForeignKey(
-        settings.AUTH_USER_MODEL,
-        on_delete=models.CASCADE)
-    members = models.ManyToManyField(
-        settings.AUTH_USER_MODEL,
-        related_name="workspaces")
 
-class Page(models.Model):
-    title = models.CharField(max_length=255)
-    workspace = models.ForeignKey(Workspace,on_delete=models.CASCADE)
-    created_at = models.DateTimeField(auto_now_add=True)
-    updated_at = models.DateTimeField(auto_now=True)
-    
-    def __str__(self):
-        return self.title
-
-class Block(models.Model):
-    TEXT = 'text'
-    IMAGE = 'image'
-    BLOCK_TYPES = [(TEXT, 'Text'), (IMAGE, 'Image')]
-
-    page = models.ForeignKey(Page, on_delete=models.CASCADE, related_name='blocks')
-    type = models.CharField(max_length=10, choices=BLOCK_TYPES, default=TEXT)
-    content = models.TextField(blank=True, null=True)
-    order = models.IntegerField()
 
 class CustomUserManager(BaseUserManager):
     def create_user(self, email, username, password=None):
@@ -70,31 +44,6 @@ class User(AbstractBaseUser, PermissionsMixin):
     def __str__(self):
         return self.email
 
-class Category(models.Model):
-    TYPE_CHOICES = (
-        ('income', 'Income'),
-        ('expense', 'Expense'),
-    )
-    name = models.CharField(max_length=100, unique=True)
-    type = models.CharField(max_length=10, choices=TYPE_CHOICES)
-
-    def __str__(self):
-        return self.name
-
-class Transaction(models.Model):
-    TRANSACTION_TYPES = [
-        ('INCOME', 'Income'),
-        ('EXPENSE', 'Expense'),
-    ]
-    
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
-    name = models.CharField(max_length=255, default='Unknown')
-    amount = models.DecimalField(max_digits=10, decimal_places=2)
-    transaction_type = models.CharField(max_length=7, choices=TRANSACTION_TYPES, default='EXPENSE')
-    date = models.DateField(default = date.today)
-
-    def __str__(self):
-        return f"{self.name} ({self.transaction_type}) - {self.amount}"
     
 class UserSession(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
@@ -105,3 +54,59 @@ class UserSession(models.Model):
 
     def __str__(self):
         return f"{self.user.username} - {self.login_time}"
+    
+
+from django.db.models import Sum
+
+# Model for Net Worth assets
+class Asset(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    name = models.CharField(max_length=100)
+    value = models.DecimalField(max_digits=15, decimal_places=2)
+
+    class Meta:
+        unique_together = ('user', 'name')  # Ensures unique asset names per user
+
+    def __str__(self):
+        return f"{self.name} - ${self.value}"
+
+# Model for financial transactions (Incomes and Expenses)
+class Transaction(models.Model):
+    INCOME = 'I'
+    EXPENSE = 'E'
+    TYPE_CHOICES = [
+        (INCOME, 'Income'),
+        (EXPENSE, 'Expense'),
+    ]
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    date = models.DateTimeField()
+    amount = models.DecimalField(max_digits=15, decimal_places=2)
+    type = models.CharField(max_length=1, choices=TYPE_CHOICES, default='E')
+    category = models.CharField(max_length=100, blank=True)
+    description = models.TextField(blank=True)
+
+    def __str__(self):
+        return f"{self.get_type_display()} - ${self.amount} on {self.date}"
+
+# Model for financial goals
+class Goal(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    name = models.CharField(max_length=100)
+    target_amount = models.DecimalField(max_digits=15, decimal_places=2)
+
+    def get_current_amount(self):
+        # Calculate current amount as the sum of all related GoalTransaction amounts
+        return self.goaltransaction_set.aggregate(total=Sum('amount'))['total'] or 0
+
+    def __str__(self):
+        return f"{self.name} - Target: ${self.target_amount}"
+
+# Model for transactions related to goals
+class GoalTransaction(models.Model):
+    goal = models.ForeignKey(Goal, on_delete=models.CASCADE)
+    date = models.DateTimeField(auto_now_add=True)
+    amount = models.DecimalField(max_digits=15, decimal_places=2)  # Positive to add, negative to remove
+    description = models.TextField(blank=True)
+
+    def __str__(self):
+        return f"{self.goal.name} - ${self.amount} on {self.date}"
