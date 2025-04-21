@@ -8,22 +8,41 @@
       <path d="M4 8a1 1 0 1 0 0-2 1 1 0 0 0 0 2m9-1a1 1 0 1 1-2 0 1 1 0 0 1 2 0M7 6a1 1 0 0 0 0 2h2a1 1 0 1 0 0-2z"/>
       <path d="M1.5 2A1.5 1.5 0 0 0 0 3.5v9A1.5 1.5 0 0 0 1.5 14h13a1.5 1.5 0 0 0 1.5-1.5v-9A1.5 1.5 0 0 0 14.5 2zM1 3.5a.5.5 0 0 1 .5-.5h13a.5.5 0 0 1 .5.5v9a.5.5 0 0 1-.5.5h-.691l-1.362-2.724A.5.5 0 0 0 12 10H4a.5.5 0 0 0-.447.276L2.19 13H1.5a.5.5 0 0 1-.5-.5zM11.691 11l1 2H3.309l1-2z"/>
     </svg>
+
     <h1 class="login-h1">Welcome Back</h1>
     <h2 class="login-h2">Login</h2>
+
     <label class="login-label">
       Email
       <input type="email" class="login-input" formControlName="email" placeholder="Email">
     </label>
+
     <label class="login-label">
       Password
       <input type="password" class="login-input" formControlName="password" placeholder="Password">
     </label>
 
-    <button class="login-button" type="submit">
-      Login
+    <button class="login-button" type="submit" [disabled]="isLoading">
+      @if (!isLoading) {
+        Login
+      } @else {
+        <span class="spinner"></span>
+      }
     </button>
+
     <hr>
-    <span>Don't have an account? <a routerLink="../register" class="register-link">Sign Up</a></span>
+
+    <span>Don't have an account? 
+      <a routerLink="../register" class="register-link">Sign Up</a>
+    </span>
+
+    @if (this.isLoginFailed && this.loginErrorMessages.length) {
+      <div [class]="{ 'login-msg-red': true }">
+        @for (item of loginErrorMessages; track $index) {
+          <span>{{ item }}</span>
+        }
+      </div>
+    }
 
   </form>
 </section>

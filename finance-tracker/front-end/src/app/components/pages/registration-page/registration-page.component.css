@@ -21,6 +21,12 @@
   font-size: 40px;
 }
 
+.reg-h2 {
+  font-size: 20px;
+  margin-top: 4px;
+  margin-bottom: 20px;
+  color: var(--dark-secondary);
+}
 
 .reg-label {
   margin-top: 16px;
@@ -33,6 +39,8 @@
   padding: 12px;
   width: 240px;
   display: block;
+  border: 1px solid var(--light);
+  margin-top: 4px;
 }
 
 .reg-input:focus {
@@ -83,6 +91,7 @@ hr {
   padding: 20px;
   text-align: center;
   box-shadow: 2px 2px 2px 2px var(--dark-shadow);
+  margin-top: 10px;
 }
 
 .reg-msg-red {
@@ -93,4 +102,25 @@ hr {
   padding: 20px;
   text-align: center;
   box-shadow: 2px 2px 2px 2px var(--dark-shadow);
+  margin-top: 10px;
+}
+
+.spinner {
+  width: 20px;
+  height: 20px;
+  border: 3px solid var(--light);
+  border-top: 3px solid var(--dark-secondary);
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+  display: inline-block;
+  vertical-align: middle;
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
 }

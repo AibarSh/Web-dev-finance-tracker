@@ -8,40 +8,53 @@
       <path d="M4 8a1 1 0 1 0 0-2 1 1 0 0 0 0 2m9-1a1 1 0 1 1-2 0 1 1 0 0 1 2 0M7 6a1 1 0 0 0 0 2h2a1 1 0 1 0 0-2z"/>
       <path d="M1.5 2A1.5 1.5 0 0 0 0 3.5v9A1.5 1.5 0 0 0 1.5 14h13a1.5 1.5 0 0 0 1.5-1.5v-9A1.5 1.5 0 0 0 14.5 2zM1 3.5a.5.5 0 0 1 .5-.5h13a.5.5 0 0 1 .5.5v9a.5.5 0 0 1-.5.5h-.691l-1.362-2.724A.5.5 0 0 0 12 10H4a.5.5 0 0 0-.447.276L2.19 13H1.5a.5.5 0 0 1-.5-.5zM11.691 11l1 2H3.309l1-2z"/>
     </svg>
+
     <h1 class="reg-h1">Welcome</h1>
     <h2 class="reg-h2">Create account</h2>
+
     <label class="reg-label">
       Username
       <input type="text" class="reg-input" formControlName="username" placeholder="Username">
     </label>
+
     <label class="reg-label">
       Email
       <input type="email" class="reg-input" formControlName="email" placeholder="Email">
     </label>
+
     <label class="reg-label">
       Password
       <input type="password" class="reg-input" formControlName="password" placeholder="Password">
     </label>
 
+    <label class="reg-label">
+      Repeat Password
+      <input type="password" class="reg-input" formControlName="password2" placeholder="Repeat Password">
+    </label>
+
     <button class="reg-button" type="submit">
-      Register
+      @if (!isLoading) {
+        Register
+      } @else {
+        <span class="spinner"></span>
+      }
     </button>
-    
-    @if (this.authService.isRegistered() && this.submitted) {
-      <div [class]="
-      {
-          'reg-msg-green' : true,
-          'reg-msg-red' : false,
+
+    @if (registrationSuccess) {
+      <div [class]="{
+        'reg-msg-green': true,
+        'reg-msg-red': false
       }">
-          {{ this.message }}
+        {{ successMessage }}
       </div>
-    } @else if (!this.authService.isRegistered() && this.submitted) {
-      <div [class]="
-      {
-          'reg-msg-green' : false,
-          'reg-msg-red' : true,
+    } @else if (!registrationSuccess && errorMessages.length) {
+      <div [class]="{
+        'reg-msg-green': false,
+        'reg-msg-red': true
       }">
-          {{ this.message }}
+        @for (error of errorMessages; track $index) {
+          <span>{{ error }}</span>
+        }
       </div>
     }
 

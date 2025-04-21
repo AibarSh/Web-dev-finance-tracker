@@ -2,11 +2,11 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    height: auto; /* Adjust the height to auto to fit content */
+    height: auto; /* автоматическая высота под контент */
     margin: 80px;
-}
-
-.login-form {
+  }
+  
+  .login-form {
     border-radius: 24px;
     border: 2px solid var(--secondary);
     width: 400px;
@@ -15,61 +15,91 @@
     flex-direction: column;
     align-items: center;
     box-shadow: 10px 10px 10px 10px var(--dark-shadow);
-}
-
-.login-h1 {
+  }
+  
+  .login-h1 {
     font-size: 40px;
-}
-
-.login-label {
+  }
+  
+  .login-label {
     margin-top: 16px;
     display: block;
     font-size: 12px;
-}
-
-.login-input {
+  }
+  
+  .login-input {
     border-radius: 12px;
     padding: 12px;
     width: 240px;
     display: block;
-}
-
-.login-input:focus {
+  }
+  
+  .login-input:focus {
     outline: 2px solid var(--primary);
-}
-
-.login-button {
+  }
+  
+  .login-button {
     font-size: 16px;
     background-color: black;
-    color:white;
+    color: white;
     margin: 20px 0;
     width: 200px;
     border-radius: 12px;
     padding: 12px;
     transition: all 0.2s ease-in-out;
     border: 1px solid white;
-}
-
-.login-button:hover {
+  }
+  
+  .login-button:hover {
     background-color: rgb(43, 43, 43);
-}
-
-.login-button:focus {
+  }
+  
+  .login-button:focus {
     outline: 2px solid var(--dark-shadow);
-}
-
-hr {
+  }
+  
+  hr {
     width: 260px;
     opacity: 0.4;
     margin-bottom: 20px;
-}
-
-.register-link {
+  }
+  
+  .register-link {
     text-decoration: none;
     color: var(--primary);
-}
-
-.register-link:hover {
+  }
+  
+  .register-link:hover {
     text-decoration: underline;
     color: var(--primary-light);
-}
+  }
+  
+  /* 🔴 Добавлены как в чужом коде */
+  
+  .login-msg-red {
+    margin: 12px 0 0;
+    border-radius: 12px;
+    color: var(--white);
+    background-color: var(--warning);
+    width: 240px;
+    padding: 20px;
+    text-align: center;
+    box-shadow: 2px 2px 2px 2px var(--dark-shadow);
+  }
+  
+  .spinner {
+    width: 20px;
+    height: 20px;
+    border: 3px solid #ccc;
+    border-top: 3px solid #333;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+    display: inline-block;
+    vertical-align: middle;
+  }
+  
+  @keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+  }
+  
