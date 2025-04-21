@@ -46,15 +46,18 @@ export class AuthService {
 
     return this.http.post<TokenResponse>(`${this.apiUrl}login/`, payload).pipe(
       tap(res => {
-        console.log('Login success:', res); // Логируем успешный ответ
-        this.saveTokens(res);
+        console.log('Login success:', res); 
+        this.saveTokens(res); 
+        this.cookie.set('email', res.email);  
+        this.cookie.set('username', res.username); 
       }),
       catchError(err => {
-        console.error('Login failed:', err); // Логируем ошибку
-        return throwError(() => err); // Ретранслируем ошибку
+        console.error('Login failed:', err);
+        return throwError(() => err); 
       })
     );
-  }
+}
+
 
   refreshAuthToken() {
     return this.http.post<TokenResponse>(`${this.apiUrl}token/refresh/`, {
@@ -86,4 +89,9 @@ export class AuthService {
     this.cookie.set('accessToken', this.accessToken);
     this.cookie.set('refreshToken', this.refreshToken);
   }
+
+  getUsername(): string {
+    return this.cookie.get('username');
+}
+
 }

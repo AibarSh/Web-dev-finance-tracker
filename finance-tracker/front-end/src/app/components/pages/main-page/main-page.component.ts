@@ -1,12 +1,21 @@
 import { Component } from '@angular/core';
-import { PieChartComponent } from './pie-chart/pie-chart/pie-chart.component';  // Правильный путь
-import { BarChartComponent } from './bar-chart/bar-chart/bar-chart.component';  // Пример импорта другого компонента
-
+import { PieChartComponent } from './pie-chart/pie-chart/pie-chart.component';
+import { BarChartComponent } from './bar-chart/bar-chart/bar-chart.component';
+import { AuthService } from '../../../auth/auth.service';  
+import { inject } from '@angular/core';
 @Component({
   selector: 'app-dashboard',
   standalone: true,
-  imports: [BarChartComponent, PieChartComponent],  // Добавляем компоненты в imports
+  imports: [BarChartComponent, PieChartComponent],
   templateUrl: './main-page.component.html',
   styleUrls: ['./main-page.component.css']
 })
-export class MainPageComponent {}
+export class MainPageComponent {
+  private authService = inject(AuthService);
+  
+  username: string = ''; 
+  
+  constructor() {
+    this.username = this.authService.getUsername(); 
+  }
+}
