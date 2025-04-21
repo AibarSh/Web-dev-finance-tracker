@@ -6,15 +6,24 @@ import { catchError, Observable, switchMap, throwError } from "rxjs";
 let isRefreshing = false;
 
 export const authTokenInterceptorFn : HttpInterceptorFn = (
-    req : HttpRequest<any>, 
+    req : HttpRequest<any>,
     next : HttpHandlerFn
 ) => {
   const authService : AuthService = inject(AuthService);
-  const accessToken = authService.accessToken;
+  const accessToken = authService.getToken();
+
+  if (
+    req.url.includes('/login') ||
+    req.url.includes('/register') ||
+    req.url.includes('/token')
+  ) {
+    return next(req);
+  }
 
   if (!accessToken) {
     console.log('nema');
   }
+
 
   if (isRefreshing) {
     return refreshTokenInterceptor(authService, req, next);
@@ -32,8 +41,8 @@ export const authTokenInterceptorFn : HttpInterceptorFn = (
 }
 
 const refreshTokenInterceptor = (
-  authService : AuthService, 
-  req : HttpRequest<any>,   
+  authService : AuthService,
+  req : HttpRequest<any>,
   next : HttpHandlerFn
 ) => {
 

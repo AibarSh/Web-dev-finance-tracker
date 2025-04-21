@@ -48,3 +48,12 @@ class GoalTransactionSerializer(serializers.ModelSerializer):
     class Meta:
         model = GoalTransaction
         fields = '__all__'
+
+class FullUserSerializer(serializers.ModelSerializer):
+    assets = AssetSerializer(many=True, source='asset_set')
+    transactions = TransactionSerializer(many=True, source='transaction_set')
+    goals = GoalSerializer(many=True, source='goal_set')
+
+    class Meta:
+        model = User
+        fields = ['id', 'email', 'username', 'date_joined', 'assets', 'transactions', 'goals']

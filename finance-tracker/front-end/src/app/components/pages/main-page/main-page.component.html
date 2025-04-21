@@ -1,5 +1,6 @@
 <div class="container">
-  <h1>Welcome, {{ username }}!</h1>
+  <h1 *ngIf="username">Welcome, {{ username }}!</h1>
+
 
     <div class="cards">
       <!-- Net Worth Section -->

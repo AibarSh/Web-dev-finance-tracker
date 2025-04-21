@@ -40,7 +40,8 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'rest_framework',
-    'rest_framework.authtoken',	
+    'rest_framework.authtoken',
+    'rest_framework_simplejwt',	
     'api',
     
     
@@ -88,7 +89,7 @@ DATABASES = {
         "ENGINE": "django.db.backends.postgresql",
         "NAME": "postgres",
         "USER": "postgres",
-        "PASSWORD": "admin",
+        "PASSWORD": "postgres",
         "HOST": "localhost",
         "PORT": "5432",
     }
@@ -140,9 +141,10 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
-        'rest_framework.authentication.TokenAuthentication',
-    )
+        'rest_framework_simplejwt.authentication.JWTAuthentication',
+    ),
 }
+
 
 INSTALLED_APPS += ['channels']
 ASGI_APPLICATION = 'backend.asgi.application'
