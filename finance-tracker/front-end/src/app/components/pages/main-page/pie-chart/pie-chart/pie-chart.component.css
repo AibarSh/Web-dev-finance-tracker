@@ -1,0 +1,114 @@
+.chart-container {
+  max-width: 400px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+.no-data-message {
+  text-align: center;
+  color: #666;
+  font-size: 16px;
+  padding: 20px;
+}
+
+.asset-form {
+  margin-top: 20px;
+  padding: 15px;
+  background: #f9f9f9;
+  border-radius: 8px;
+}
+
+.asset-form h3 {
+  font-size: 18px;
+  margin-bottom: 15px;
+}
+
+.form-group {
+  margin-bottom: 15px;
+}
+
+.form-group label {
+  display: block;
+  font-weight: bold;
+  margin-bottom: 5px;
+}
+
+.form-group input {
+  width: 100%;
+  padding: 8px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.form-group .error {
+  color: red;
+  font-size: 12px;
+  margin-top: 5px;
+}
+
+.form-actions {
+  display: flex;
+  gap: 10px;
+}
+
+.form-actions button {
+  padding: 8px 16px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.form-actions button[type="submit"] {
+  background: #2ecc71;
+  color: white;
+}
+
+.form-actions button[type="button"] {
+  background: #ccc;
+  color: #333;
+}
+
+.form-actions button:disabled {
+  background: #999;
+  cursor: not-allowed;
+}
+
+.asset-list {
+  margin-top: 20px;
+}
+
+.asset-list h3 {
+  font-size: 18px;
+  margin-bottom: 15px;
+}
+
+.asset-list ul {
+  list-style: none;
+  padding: 0;
+}
+
+.asset-list li {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px;
+  border-bottom: 1px solid #eee;
+}
+
+.asset-list li button {
+  padding: 5px 10px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.asset-list li button:first-of-type {
+  background: #3498db;
+  color: white;
+  margin-right: 5px;
+}
+
+.asset-list li button:last-of-type {
+  background: #e74c3c;
+  color: white;
+}

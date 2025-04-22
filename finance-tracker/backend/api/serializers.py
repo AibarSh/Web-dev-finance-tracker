@@ -23,18 +23,16 @@ class LoginSerializer(serializers.Serializer):
     email = serializers.EmailField()
     password = serializers.CharField(style={'input_type': 'password'})
 
-
 class AssetSerializer(serializers.ModelSerializer):
     class Meta:
         model = Asset
-        fields = '__all__'
-
+        fields = ['id', 'user', 'name', 'value']
+        read_only_fields = ['user', 'id']  # user and id set by backend
 
 class TransactionSerializer(serializers.ModelSerializer):
     class Meta:
         model = Transaction
         fields = '__all__'
-
 
 class GoalSerializer(serializers.ModelSerializer):
     current_amount = serializers.DecimalField(source='get_current_amount', max_digits=15, decimal_places=2, read_only=True)
@@ -42,7 +40,6 @@ class GoalSerializer(serializers.ModelSerializer):
     class Meta:
         model = Goal
         fields = ['id', 'user', 'name', 'target_amount', 'current_amount']
-
 
 class GoalTransactionSerializer(serializers.ModelSerializer):
     class Meta:

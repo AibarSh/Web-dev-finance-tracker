@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/5.1/ref/settings/
 """
 
 from pathlib import Path
+from datetime import timedelta
 import os
 
 
@@ -145,6 +146,48 @@ REST_FRAMEWORK = {
     ),
 }
 
+SIMPLE_JWT = {
+    # Access token lifetime (set to 30 days for convenience)
+    'ACCESS_TOKEN_LIFETIME': timedelta(days=30),
+    
+    # Refresh token lifetime (set to 90 days)
+    'REFRESH_TOKEN_LIFETIME': timedelta(days=90),
+    
+    # Whether to allow refresh tokens to generate new access tokens
+    'ROTATE_REFRESH_TOKENS': False,
+    
+    # Whether to blacklist old refresh tokens after rotation
+    'BLACKLIST_AFTER_ROTATION': False,
+    
+    # Algorithm for signing tokens
+    'ALGORITHM': 'HS256',
+    
+    # Signing key (use a secure key in production, can be set via environment variable)
+    'SIGNING_KEY': 'your-secure-signing-key-here',
+    
+    # Verify token signatures
+    'VERIFYING_KEY': None,
+    
+    # Audience and issuer (optional, can be set for additional validation)
+    'AUDIENCE': None,
+    'ISSUER': None,
+    
+    # Token type claim
+    'TOKEN_TYPE_CLAIM': 'token_type',
+    
+    # User ID field in token payload
+    'USER_ID_FIELD': 'id',
+    'USER_ID_CLAIM': 'user_id',
+    
+    # Authentication header types
+    'AUTH_HEADER_TYPES': ('Bearer',),
+    
+    # Optional: Sliding token settings (disabled by default)
+    'SLIDING_TOKEN_REFRESH_EXP_CLAIM': 'refresh_exp',
+    'SLIDING_TOKEN_LIFETIME': timedelta(days=30),
+    'SLIDING_TOKEN_REFRESH_LIFETIME': timedelta(days=90),
+}
+
 
 INSTALLED_APPS += ['channels']
 ASGI_APPLICATION = 'backend.asgi.application'
@@ -155,5 +198,11 @@ CHANNEL_LAYERS = {
 }
 
 CORS_ALLOWED_ORIGINS = [
+    "http://localhost:4200", 
+]
+CORS_ALLOW_CREDENTIALS = True
+
+APPEND_SLASH = True
+CSRF_TRUSTED_ORIGINS = [
     "http://localhost:4200", 
 ]

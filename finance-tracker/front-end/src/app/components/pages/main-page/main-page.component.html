@@ -6,8 +6,8 @@
       <!-- Net Worth Section -->
       <div class="card">
         <h2>Net Worth</h2>
-        <p class="amount">$52,000.00</p>
-        <app-pie-chart></app-pie-chart>
+        <p class="amount">${{ totalNetWorth | number:'1.2-2' }}</p>
+        <app-pie-chart [netWorth]="userData?.assets ?? []" (netWorthUpdated)="refreshNetWorth()"></app-pie-chart>
       </div>
 
       <!-- Budget Section -->

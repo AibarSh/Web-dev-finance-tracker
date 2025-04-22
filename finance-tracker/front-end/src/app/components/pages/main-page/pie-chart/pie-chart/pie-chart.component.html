@@ -1,3 +1,44 @@
 <div class="chart-container">
-  <canvas  id="MyPieChart" >{{ pieChart }}</canvas>
+  <div *ngIf="netWorth && netWorth.length > 0; else noData">
+    <canvas id="MyPieChart" width="400" height="400"></canvas>
+  </div>
+  <ng-template #noData>
+    <p class="no-data-message">No assets available. Add some assets to see your net worth!</p>
+  </ng-template>
+
+  <div class="asset-form">
+    <h3>{{ editingAsset ? 'Edit Asset' : 'Add Asset' }}</h3>
+    <form [formGroup]="assetForm" (ngSubmit)="onSubmit()">
+      <div class="form-group">
+        <label for="name">Asset Name</label>
+        <input id="name" formControlName="name" placeholder="e.g., Car" />
+        <div *ngIf="assetForm.get('name')?.invalid && assetForm.get('name')?.touched" class="error">
+          Asset name is required
+        </div>
+      </div>
+      <div class="form-group">
+        <label for="value">Value ($)</label>
+        <input id="value" formControlName="value" type="number" placeholder="e.g., 10000" />
+        <div *ngIf="assetForm.get('value')?.invalid && assetForm.get('value')?.touched" class="error">
+          Value must be a positive number
+        </div>
+      </div>
+      <div class="form-actions">
+        <button type="submit" [disabled]="assetForm.invalid">Save</button>
+        <button type="button" *ngIf="editingAsset" (click)="cancelEdit()">Cancel</button>
+      </div>
+    </form>
+  </div>
+
+  <!-- Asset List -->
+  <div class="asset-list" *ngIf="netWorth && netWorth.length > 0">
+    <h3>Current Assets</h3>
+    <ul>
+      <li *ngFor="let asset of netWorth">
+        {{ asset.name }}: ${{ asset.value | number:'1.2-2' }}
+        <button (click)="editAsset(asset)">Edit</button>
+        <button (click)="deleteAsset(asset.id)">Delete</button>
+      </li>
+    </ul>
+  </div>
 </div>

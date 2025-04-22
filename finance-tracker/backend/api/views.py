@@ -30,13 +30,16 @@ class RegisterView(generics.CreateAPIView):
         serializer.is_valid(raise_exception=True)
         user = serializer.save()
         
-        token, _ = Token.objects.get_or_create(user=user)
+        refresh = RefreshToken.for_user(user)
+        access_token = str(refresh.access_token)
+        refresh_token = str(refresh)
         
         return Response({
             "user_id": user.id,
             "email": user.email,
             "username": user.username,
-            "token": token.key
+            "access": access_token,
+            "refresh": refresh_token
         }, status=status.HTTP_201_CREATED)
 # Login View
 class LoginView(GenericAPIView):
@@ -105,6 +108,7 @@ class AssetViewSet(viewsets.ModelViewSet):
     queryset = Asset.objects.all()
     serializer_class = AssetSerializer
     permission_classes = [permissions.IsAuthenticated]
+    http_method_names = ['get', 'post', 'patch', 'delete']
 
     def get_queryset(self):
         return Asset.objects.filter(user=self.request.user)

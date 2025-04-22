@@ -1,7 +1,8 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import { Observable, catchError, tap, throwError } from 'rxjs';
-import { TokenResponse, UserData, UserLogin, UserRegistration } from './auth.interface';
+import { TokenResponse, UserLogin, UserRegistration } from './auth.interface';
+import { UserFinanceData} from '../user-interfaces/user-interfaces.interface';
 import { Router } from '@angular/router';
 import { CookieService } from 'ngx-cookie-service';
 
@@ -21,7 +22,7 @@ export class AuthService {
 
   registered: boolean = false;
 
-  getUserData(): Observable<UserData> {
+  getUserData(): Observable<UserFinanceData> {
     const token = this.getToken();
     if (!token) {
       console.error('No token available');
@@ -31,7 +32,7 @@ export class AuthService {
       'Authorization': `Bearer ${token}`
     });
 
-    return this.http.get<UserData>(`${this.apiUrl}user-full-data/`, { headers });
+    return this.http.get<UserFinanceData>(`${this.apiUrl}user-full-data/`, { headers });
   }
 
 
