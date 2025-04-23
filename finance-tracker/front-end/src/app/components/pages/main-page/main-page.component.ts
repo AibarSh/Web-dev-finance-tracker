@@ -50,7 +50,17 @@ export class MainPageComponent {
               ...tx,
               amount: this.parseValue(tx.amount)
             })) : []
-          })) : []
+          })) : [],
+          transactions: Array.isArray(data.transactions)
+          ? data.transactions.map((tx: any) => ({
+              id: tx.id,
+              date: tx.date,
+              amount: this.parseValue(tx.amount),
+              type: tx.type,
+              category: tx.category,
+              description: tx.description
+            }))
+          : []
         };
         this.username = data.username;
         this.calculateTotalNetWorth();
@@ -97,6 +107,9 @@ export class MainPageComponent {
   }
 
   refreshUserData(): void {
+    this.fetchUserData();
+  }
+  handleDataUpdated(): void {
     this.fetchUserData();
   }
 }

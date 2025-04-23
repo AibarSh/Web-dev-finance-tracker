@@ -38,3 +38,7 @@ export interface UserFinanceData {
   transactions: Transaction[];
   goals: Goal[];
 }
+export interface Message {
+  text: string;
+  type: 'error' | 'success' | 'confirm';
+}

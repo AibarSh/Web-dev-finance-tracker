@@ -3,24 +3,26 @@
 
 
     <div class="cards">
+
       <!-- Net Worth Section -->
-      <div class="card">
+      <div class="card-wide">
         <h2>Net Worth</h2>
         <p class="amount">${{ totalNetWorth | number:'1.2-2' }}</p>
-        <app-pie-chart [netWorth]="userData?.assets ?? []" (netWorthUpdated)="refreshNetWorth()"></app-pie-chart>
+        <app-pie-chart [netWorth]="userData?.assets ?? []" (netWorthUpdated)="refreshUserData()"></app-pie-chart>
       </div>
 
       <!-- Budget Section -->
-      <div class="card">
+      <div class="card-wide budget-section">
         <h2>Budget</h2>
         <app-budget [goals]="userData?.goals ?? []" (goalsUpdated)="refreshUserData()"></app-budget>
       </div>
-    </div>
+
+  </div>
 
     <!-- Cash Flow Section -->
-    <div class="card full-width">
+    <div class="card full-width transactions">
       <h2>Cash Flow</h2>
       <p>Your income and expenses over time</p>
-      <app-bar-chart></app-bar-chart>
+      <app-bar-chart [transactions]="userData?.transactions ?? []" (transactionsUpdated) = "refreshUserData()"></app-bar-chart>
     </div>
   </div>

@@ -32,7 +32,8 @@ class AssetSerializer(serializers.ModelSerializer):
 class TransactionSerializer(serializers.ModelSerializer):
     class Meta:
         model = Transaction
-        fields = '__all__'
+        fields = ['id', 'date', 'amount', 'type', 'category', 'description']
+        read_only_fields = ['id']
 
 class GoalTransactionSerializer(serializers.ModelSerializer):
     class Meta:

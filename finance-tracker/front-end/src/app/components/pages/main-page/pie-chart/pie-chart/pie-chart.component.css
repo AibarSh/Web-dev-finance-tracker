@@ -1,7 +1,17 @@
 .chart-container {
+  display: flex;
+  flex-direction: row;
+  gap: 2rem;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: flex-start;
+  width: 100%;
+  color: white;
+}
+
+canvas {
   max-width: 400px;
-  margin: 0 auto;
-  padding: 20px;
+  flex: 1;
 }
 
 .no-data-message {
@@ -12,10 +22,12 @@
 }
 
 .asset-form {
-  margin-top: 20px;
-  padding: 15px;
-  background: #f9f9f9;
+  background-color: #1b1b1b;
+  padding: 1rem;
   border-radius: 8px;
+  flex: 1;
+  min-width: 250px;
+  margin-bottom: 20px;
 }
 
 .asset-form h3 {
@@ -74,7 +86,11 @@
 }
 
 .asset-list {
-  margin-top: 20px;
+  background-color: #1b1b1b;
+  padding: 1rem;
+  border-radius: 8px;
+  flex: 1;
+  min-width: 250px;
 }
 
 .asset-list h3 {

@@ -6,6 +6,8 @@
     <p class="no-data-message">No assets available. Add some assets to see your net worth!</p>
   </ng-template>
 
+
+  <div class="form-list">
   <div class="asset-form">
     <h3>{{ editingAsset ? 'Edit Asset' : 'Add Asset' }}</h3>
     <form [formGroup]="assetForm" (ngSubmit)="onSubmit()">
@@ -41,4 +43,5 @@
       </li>
     </ul>
   </div>
+</div>
 </div>

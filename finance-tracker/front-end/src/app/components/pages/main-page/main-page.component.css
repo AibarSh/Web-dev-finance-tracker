@@ -1,49 +1,114 @@
-
-
 .container {
-    max-width: 900px;
-    margin: auto;
-  }
+  width: 100%;
+  margin: 0 auto;
+  padding: 20px;
+  align-items:center;
+  justify-items: center;
+}
 
-  h1 {
-    text-align: center;
-    margin-bottom: 20px;
-  }
+h1 {
+  text-align: center;
+  margin-bottom: 20px;
+  color: #fcfcfc;
+}
 
+.cards {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+  justify-content: center;
+  margin-bottom: 20px;
+}
+
+.card {
+  flex: 1 1 400px;
+  max-width: 500px;
+  background-color: #111111;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.card-wide {
+  background-color: #111111;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+}
+
+.card-wide app-budget {
+  display: flex;
+  flex-direction: row;
+  gap: 2rem;
+  width: 100%;
+}
+
+.card h2 {
+  margin: 0 0 10px;
+  color: #fcfcfc;
+}
+
+.card .amount {
+  font-size: 24px;
+  font-weight: bold;
+  color: #2ecc71;
+  margin: 0 0 20px;
+}
+
+.card-wide .amount {
+  font-size: 24px;
+  font-weight: bold;
+  color: #2ecc71;
+  margin: 0 0 20px;
+  display:inline-block;
+}
+
+.card.full-width {
+  align-self: center;
+  min-width: 1500px;
+  max-width: 1500px;
+}
+
+.budget-section {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.budget-section app-budget {
+  display: flex;
+  flex-direction: row;
+  gap: 2rem;
+  flex-wrap: wrap;
+  width: 100%;
+}
+
+
+
+
+@media (max-width: 1000px) {
   .cards {
-    display: flex;
-    gap: 20px;
-    justify-content: space-between;
-    flex-wrap: wrap;
-  }
-
-  .card {
-    background: #1e1e1e;
-    padding: 20px;
-    border-radius: 8px;
-    box-shadow: 0 2px 10px rgba(255, 255, 255, 0.1);
-    flex: 1;
-    min-width: 280px;
-  }
-
-  .full-width {
-    margin-top: 20px;
-  }
-
-  .amount {
-    font-size: 24px;
-    font-weight: bold;
-    margin: 10px 0;
-  }
-
-  .chart-placeholder {
-    height: 200px;
-    background: #333;
-    border-radius: 8px;
-    display: flex;
+    flex-direction: column;
     align-items: center;
-    justify-content: center;
-    color: #aaa;
   }
+  .card {
+    max-width: 95%;
+  }
+}
 
-
+@media (max-width: 600px) {
+  .container {
+    padding: 10px;
+  }
+  .card {
+    padding: 15px;
+  }
+  h1 {
+    font-size: 24px;
+  }
+}

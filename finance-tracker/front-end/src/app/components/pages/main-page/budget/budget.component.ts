@@ -4,11 +4,8 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { CookieService } from 'ngx-cookie-service';
 import { Goal, GoalTransaction } from '../../../../user-interfaces/user-interfaces.interface';
+import { Message } from '../../../../user-interfaces/user-interfaces.interface';
 
-interface Message {
-  text: string;
-  type: 'error' | 'success';
-}
 
 @Component({
   selector: 'app-budget',

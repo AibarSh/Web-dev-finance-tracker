@@ -5,6 +5,7 @@ from django.urls import path
 from django.contrib.auth import authenticate
 from .serializers import  UserSerializer
 from rest_framework.exceptions import ValidationError
+from rest_framework.decorators import action
 
 
 from rest_framework import viewsets, generics, status, permissions
@@ -128,6 +129,13 @@ class TransactionViewSet(viewsets.ModelViewSet):
 
     def perform_create(self, serializer):
         serializer.save(user=self.request.user)
+
+    @action(detail=False, methods=['delete'], url_path='clear')
+    def clear_transactions(self, request):
+        transactions = Transaction.objects.filter(user=self.request.user)
+        count = transactions.count()
+        transactions.delete()
+        return Response({'message': f'Successfully deleted {count} transactions.'})
 
 
 class GoalViewSet(viewsets.ModelViewSet):

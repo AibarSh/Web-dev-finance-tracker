@@ -1,5 +1,71 @@
 
-
-<div class="chart-container">
-  <canvas  id="MyBarChart" >{{ chart }}</canvas>
+<div class="message-modal" *ngIf="message" [ngClass]="{'error': message.type === 'error', 'success': message.type === 'success', 'confirm': message.type === 'confirm'}">
+  <div class="message-content">
+    <span>{{ message.text }}</span>
+    <div class="message-actions" *ngIf="message.type === 'confirm'">
+      <button class="confirm-button" (click)="confirmClear()">Confirm</button>
+      <button class="cancel-button" (click)="clearMessage()">Cancel</button>
+    </div>
+    <button class="close-button" *ngIf="message.type !== 'confirm'" (click)="clearMessage()">×</button>
+  </div>
 </div>
+
+
+<div class = "bar-chart-wrapper">
+  <div class="chart-container">
+    <canvas id="MyBarChart">{{ chart }}</canvas>
+    <div class="transaction-list" *ngIf="transactions && transactions.length > 0; else noTransactions">
+      <h3>Transactions</h3>
+      <ul>
+        <li *ngFor="let tx of transactions">
+          {{ tx.date | date:'shortDate' }}: ${{ tx.amount | number:'1.2-2' }} ({{ tx.type === 'I' ? 'Income' : 'Expense' }}) - {{ tx.category }}: {{ tx.description }}
+          <button (click)="editTransaction(tx)">Edit</button>
+          <button (click)="deleteTransaction(tx.id)">Delete</button>
+        </li>
+      </ul>
+      <button class="clear-all" (click)="clearAllTransactions()">Clear All Transactions</button>
+    </div>
+
+    <ng-template #noTransactions>
+      <div class="no-transactions">
+        No transactions recorded. Add one above.
+      </div>
+    </ng-template>
+
+  </div>
+  <div class="form-list-container">
+    <div class="transaction-form">
+      <h3>{{ editingTransaction ? 'Edit Transaction' : 'Add Transaction' }}</h3>
+      <form [formGroup]="transactionForm" (ngSubmit)="onSubmit()">
+        <div>
+          <label for="date">Date:</label>
+          <input id="date" formControlName="date" type="date" required />
+        </div>
+        <div>
+          <label for="amount">Amount ($):</label>
+          <input id="amount" formControlName="amount" type="number" step="0.01" min="0.01" placeholder="e.g., 100.00" required />
+        </div>
+        <div>
+          <label for="type">Type:</label>
+          <select id="type" formControlName="type" required>
+            <option value="I">Income</option>
+            <option value="E">Expense</option>
+          </select>
+        </div>
+        <div>
+          <label for="category">Category:</label>
+          <input id="category" formControlName="category" type="text" placeholder="e.g., Salary, Food" required />
+        </div>
+        <div>
+          <label for="description">Description:</label>
+          <textarea id="description" formControlName="description" placeholder="e.g., Monthly paycheck"></textarea>
+        </div>
+        <div class="form-actions">
+          <button type="submit" [disabled]="transactionForm.invalid">Save</button>
+          <button type="button" *ngIf="editingTransaction" (click)="cancelEdit()">Cancel</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+

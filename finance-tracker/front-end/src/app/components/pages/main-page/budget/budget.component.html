@@ -1,4 +1,4 @@
-<p>State of your goals and budget</p>
+
 
 <!-- Message Modal -->
 <div class="message-modal" *ngIf="message" [ngClass]="{'error': message.type === 'error', 'success': message.type === 'success'}">
@@ -8,6 +8,9 @@
   </div>
 </div>
 
+
+<div class="budget-container">
+<p>State of your goals and budget</p>
 <div class="budget-list" *ngIf="goals && goals.length > 0; else noGoals">
   <div class="budget-item" *ngFor="let goal of goals">
     <div class="goal-header">
@@ -34,8 +37,11 @@
     No goals set. Add a goal below.
   </div>
 </ng-template>
+</div>
 
-<div class="goal-form">
+<div class="goal-form-section">
+
+  <div class="goal-form">
   <h3>{{ editingGoal ? 'Edit Goal' : 'Add Goal' }}</h3>
   <form [formGroup]="goalForm" (ngSubmit)="onSubmitGoal()">
     <div>
@@ -51,9 +57,9 @@
       <button type="button" *ngIf="editingGoal" (click)="cancelEditGoal()">Cancel</button>
     </div>
   </form>
-</div>
+  </div>
 
-<div class="transaction-form">
+  <div class="transaction-form">
   <h3>{{ editingTransaction ? 'Edit Transaction' : 'Add Transaction' }}</h3>
   <form [formGroup]="transactionForm" (ngSubmit)="onSubmitTransaction()">
     <div>
@@ -76,4 +82,6 @@
       <button type="button" *ngIf="editingTransaction" (click)="cancelEditTransaction()">Cancel</button>
     </div>
   </form>
+  </div>
+
 </div>
