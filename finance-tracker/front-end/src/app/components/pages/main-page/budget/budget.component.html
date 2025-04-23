@@ -1,0 +1,79 @@
+<p>State of your goals and budget</p>
+
+<!-- Message Modal -->
+<div class="message-modal" *ngIf="message" [ngClass]="{'error': message.type === 'error', 'success': message.type === 'success'}">
+  <div class="message-content">
+    <span>{{ message.text }}</span>
+    <button class="close-button" (click)="clearMessage()">×</button>
+  </div>
+</div>
+
+<div class="budget-list" *ngIf="goals && goals.length > 0; else noGoals">
+  <div class="budget-item" *ngFor="let goal of goals">
+    <div class="goal-header">
+      <span>{{ goal.name }}</span>
+      <progress [value]="goal.current_amount" [max]="goal.target_amount"></progress>
+      <span>${{ goal.current_amount | number:'1.2-2' }} / ${{ goal.target_amount | number:'1.2-2' }}</span>
+      <button (click)="editGoal(goal)">Edit</button>
+      <button (click)="deleteGoal(goal.id)">Delete</button>
+    </div>
+    <div class="transactions" *ngIf="goal.goal_transactions && goal.goal_transactions.length > 0">
+      <h4>Transactions</h4>
+      <ul>
+        <li *ngFor="let tx of goal.goal_transactions">
+          {{ tx.date | date:'short' }}: ${{ tx.amount | number:'1.2-2' }} - {{ tx.description }}
+          <button (click)="editTransaction(tx)">Edit</button>
+          <button (click)="deleteTransaction(tx.id)">Delete</button>
+        </li>
+      </ul>
+    </div>
+  </div>
+</div>
+<ng-template #noGoals>
+  <div class="no-goals">
+    No goals set. Add a goal below.
+  </div>
+</ng-template>
+
+<div class="goal-form">
+  <h3>{{ editingGoal ? 'Edit Goal' : 'Add Goal' }}</h3>
+  <form [formGroup]="goalForm" (ngSubmit)="onSubmitGoal()">
+    <div>
+      <label for="name">Goal Name:</label>
+      <input id="name" formControlName="name" type="text" placeholder="e.g., New Car" />
+    </div>
+    <div>
+      <label for="target_amount">Target Amount ($):</label>
+      <input id="target_amount" formControlName="target_amount" type="number" step="0.01" placeholder="e.g., 50000" />
+    </div>
+    <div class="form-actions">
+      <button type="submit" [disabled]="goalForm.invalid">Save</button>
+      <button type="button" *ngIf="editingGoal" (click)="cancelEditGoal()">Cancel</button>
+    </div>
+  </form>
+</div>
+
+<div class="transaction-form">
+  <h3>{{ editingTransaction ? 'Edit Transaction' : 'Add Transaction' }}</h3>
+  <form [formGroup]="transactionForm" (ngSubmit)="onSubmitTransaction()">
+    <div>
+      <label for="goal">Goal:</label>
+      <select id="goal" formControlName="goal">
+        <option [ngValue]="null" disabled>Select a goal</option>
+        <option *ngFor="let goal of goals" [ngValue]="goal.id">{{ goal.name }}</option>
+      </select>
+    </div>
+    <div>
+      <label for="amount">Amount ($):</label>
+      <input id="amount" formControlName="amount" type="number" step="0.01" placeholder="e.g., 1000" />
+    </div>
+    <div>
+      <label for="description">Description:</label>
+      <input id="description" formControlName="description" type="text" placeholder="e.g., Monthly contribution" />
+    </div>
+    <div class="form-actions">
+      <button type="submit" [disabled]="transactionForm.invalid">Save</button>
+      <button type="button" *ngIf="editingTransaction" (click)="cancelEditTransaction()">Cancel</button>
+    </div>
+  </form>
+</div>

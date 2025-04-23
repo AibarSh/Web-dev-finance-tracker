@@ -16,6 +16,7 @@ export interface Transaction {
 
 export interface GoalTransaction {
   id: number;
+  goal: number;
   date: string;
   amount: number;
   description: string;
@@ -23,12 +24,12 @@ export interface GoalTransaction {
 
 export interface Goal {
   id: number;
+  user: number;
   name: string;
   target_amount: number;
   current_amount: number;
   goal_transactions: GoalTransaction[];
 }
-
 export interface UserFinanceData {
   id: number;
   username: string;

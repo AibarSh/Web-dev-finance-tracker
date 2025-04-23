@@ -34,17 +34,21 @@ class TransactionSerializer(serializers.ModelSerializer):
         model = Transaction
         fields = '__all__'
 
-class GoalSerializer(serializers.ModelSerializer):
-    current_amount = serializers.DecimalField(source='get_current_amount', max_digits=15, decimal_places=2, read_only=True)
-
-    class Meta:
-        model = Goal
-        fields = ['id', 'user', 'name', 'target_amount', 'current_amount']
-
 class GoalTransactionSerializer(serializers.ModelSerializer):
     class Meta:
         model = GoalTransaction
         fields = '__all__'
+        
+class GoalSerializer(serializers.ModelSerializer):
+    current_amount = serializers.DecimalField(source='get_current_amount', max_digits=15, decimal_places=2, read_only=True)
+    goal_transactions = GoalTransactionSerializer(source='goaltransaction_set', many=True, read_only=True)
+
+    class Meta:
+        model = Goal
+        fields = ['id', 'user', 'name', 'target_amount', 'current_amount', 'goal_transactions']
+        read_only_fields = ['user', 'current_amount', 'goal_transactions']
+
+
 
 class FullUserSerializer(serializers.ModelSerializer):
     assets = AssetSerializer(many=True, source='asset_set')

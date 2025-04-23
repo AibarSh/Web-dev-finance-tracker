@@ -4,11 +4,12 @@ import { BarChartComponent } from './bar-chart/bar-chart/bar-chart.component';
 import { AuthService } from '../../../auth/auth.service';
 import { inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { UserFinanceData, NetWorth, Goal, GoalTransaction,Transaction} from '../../../user-interfaces/user-interfaces.interface';
+import { UserFinanceData, NetWorth, Goal,GoalTransaction,Transaction} from '../../../user-interfaces/user-interfaces.interface';
+import { BudgetComponent } from "./budget/budget.component";
 @Component({
   selector: 'app-dashboard',
   standalone: true,
-  imports: [BarChartComponent, PieChartComponent,CommonModule],
+  imports: [BarChartComponent, PieChartComponent, CommonModule, BudgetComponent],
   templateUrl: './main-page.component.html',
   styleUrls: ['./main-page.component.css']
 })
@@ -39,12 +40,22 @@ export class MainPageComponent {
           ...data,
           assets: Array.isArray(data.assets) ? data.assets.map(asset => ({
             ...asset,
-            value: this.parseValue(asset.value) // Parse value to number
+            value: this.parseValue(asset.value)
+          })) : [],
+          goals: Array.isArray(data.goals) ? data.goals.map(goal => ({
+            ...goal,
+            target_amount: this.parseValue(goal.target_amount),
+            current_amount: this.parseValue(goal.current_amount),
+            goal_transactions: Array.isArray(goal.goal_transactions) ? goal.goal_transactions.map(tx => ({
+              ...tx,
+              amount: this.parseValue(tx.amount)
+            })) : []
           })) : []
         };
         this.username = data.username;
         this.calculateTotalNetWorth();
         console.log('Processed userData.assets:', this.userData.assets);
+        console.log('Processed userData.goals:', this.userData.goals);
       },
       error: (err) => {
         console.error('Failed to fetch user data:', err);
@@ -82,6 +93,10 @@ export class MainPageComponent {
   }
 
   refreshNetWorth(): void {
+    this.fetchUserData();
+  }
+
+  refreshUserData(): void {
     this.fetchUserData();
   }
 }

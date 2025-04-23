@@ -4,7 +4,8 @@ from rest_framework_simplejwt.tokens import RefreshToken
 from django.urls import path
 from django.contrib.auth import authenticate
 from .serializers import  UserSerializer
-from rest_framework.authtoken.models import Token
+from rest_framework.exceptions import ValidationError
+
 
 from rest_framework import viewsets, generics, status, permissions
 from rest_framework.generics import GenericAPIView
@@ -147,14 +148,49 @@ class GoalTransactionViewSet(viewsets.ModelViewSet):
     permission_classes = [permissions.IsAuthenticated]
 
     def get_queryset(self):
-        # Only return transactions related to the user's goals
         return GoalTransaction.objects.filter(goal__user=self.request.user)
 
     def perform_create(self, serializer):
-        # Make sure user owns the goal
         goal = serializer.validated_data['goal']
+        amount = serializer.validated_data['amount']
+
+        # Ensure user owns the goal
         if goal.user != self.request.user:
-            raise PermissionError("You do not own this goal.")
+            raise ValidationError("You do not own this goal.")
+
+        # Calculate current_amount before the new transaction
+        current_amount = goal.get_current_amount() or 0
+        new_amount = current_amount + amount
+
+        # Check if new_amount would exceed target_amount
+        if new_amount > goal.target_amount:
+            raise ValidationError(
+                f"Transaction would exceed goal target of ${goal.target_amount:.2f}. "
+                f"Current: ${current_amount:.2f}, Maximum additional amount: ${(goal.target_amount - current_amount):.2f}."
+            )
+
+        serializer.save()
+
+    def perform_update(self, serializer):
+        goal = serializer.validated_data['goal']
+        amount = serializer.validated_data['amount']
+
+        # Ensure user owns the goal
+        if goal.user != self.request.user:
+            raise ValidationError("You do not own this goal.")
+
+        # Calculate current_amount excluding the transaction being updated
+        transaction = self.get_object()
+        current_amount = goal.get_current_amount() - transaction.amount
+        new_amount = current_amount + amount
+
+        # Check if new_amount would exceed target_amount
+        if new_amount > goal.target_amount:
+            raise ValidationError(
+                f"Transaction would exceed goal target of ${goal.target_amount:.2f}. "
+                f"Current: ${current_amount:.2f}, Maximum additional amount: ${(goal.target_amount - current_amount):.2f}."
+            )
+
         serializer.save()
 
 @api_view(['GET'])

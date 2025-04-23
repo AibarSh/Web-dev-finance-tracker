@@ -13,17 +13,7 @@
       <!-- Budget Section -->
       <div class="card">
         <h2>Budget</h2>
-        <p>State of your goals and budget</p>
-        <div class="budget-item">
-          <span>New Car</span>
-          <progress value="5000" max="50000"></progress>
-          <span>$5,000.01 / $50,000.00</span>
-        </div>
-        <div class="budget-item">
-          <span>Vacation</span>
-          <progress value="1002" max="3000"></progress>
-          <span>€1,002.15 / €3,000.00</span>
-        </div>
+        <app-budget [goals]="userData?.goals ?? []" (goalsUpdated)="refreshUserData()"></app-budget>
       </div>
     </div>
 

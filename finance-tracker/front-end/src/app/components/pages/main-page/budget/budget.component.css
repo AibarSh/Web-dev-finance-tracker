@@ -1,0 +1,203 @@
+.budget-list {
+  max-width: 600px;
+  margin: 20px auto;
+}
+
+.budget-item {
+  padding: 10px 0;
+  border-bottom: 1px solid #eee;
+}
+
+.goal-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.goal-header span:first-child {
+  flex: 1;
+}
+
+.goal-header progress {
+  width: 200px;
+  height: 12px;
+  margin: 0 10px;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  background-color: #f3f3f3;
+}
+
+.goal-header progress::-webkit-progress-bar {
+  background-color: #f3f3f3;
+  border-radius: 6px;
+}
+
+.goal-header progress::-webkit-progress-value {
+  background-color: #2ecc71;
+  border-radius: 6px;
+}
+
+.goal-header progress::-moz-progress-bar {
+  background-color: #2ecc71;
+  border-radius: 6px;
+}
+
+.transactions {
+  margin-top: 10px;
+  padding-left: 20px;
+}
+
+.transactions h4 {
+  margin: 10px 0;
+}
+
+.transactions ul {
+  list-style: none;
+  padding: 0;
+}
+
+.transactions li {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 5px 0;
+}
+
+.transactions li button {
+  padding: 5px 10px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  margin-left: 5px;
+}
+
+.transactions li button:first-of-type {
+  background: #3498db;
+  color: white;
+}
+
+.transactions li button:last-of-type {
+  background: #e74c3c;
+  color: white;
+}
+
+.no-goals {
+  text-align: center;
+  color: #888;
+  margin-top: 20px;
+  font-size: 16px;
+}
+
+.goal-form, .transaction-form {
+  max-width: 600px;
+  margin: 20px auto;
+}
+
+.goal-form h3, .transaction-form h3 {
+  margin-bottom: 15px;
+}
+
+.goal-form div, .transaction-form div {
+  margin-bottom: 10px;
+}
+
+.goal-form label, .transaction-form label {
+  display: block;
+  margin-bottom: 5px;
+}
+
+.goal-form input, .transaction-form input, .transaction-form select {
+  width: 100%;
+  padding: 8px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.form-actions {
+  display: flex;
+  gap: 10px;
+}
+
+.form-actions button {
+  padding: 8px 16px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.form-actions button[type="submit"] {
+  background: #2ecc71;
+  color: white;
+}
+
+.form-actions button[type="button"] {
+  background: #ccc;
+}
+
+/* Message Modal Styles */
+.message-modal {
+  position: fixed;
+  top: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 1000;
+  max-width: 600px;
+  width: 90%;
+  animation: slideIn 0.3s ease-out;
+}
+
+.message-content {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 15px 20px;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+  font-size: 16px;
+  line-height: 1.5;
+}
+
+.message-content span {
+  flex: 1;
+}
+
+.message-content .close-button {
+  background: none;
+  border: none;
+  font-size: 20px;
+  cursor: pointer;
+  padding: 0 10px;
+  color: #333;
+}
+
+.message-modal.success .message-content {
+  background-color: #2ecc71;
+  color: white;
+}
+
+.message-modal.error .message-content {
+  background-color: #e74c3c;
+  color: white;
+}
+
+@keyframes slideIn {
+  from {
+    transform: translateX(-50%) translateY(-20px);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(-50%) translateY(0);
+    opacity: 1;
+  }
+}
+
+@media (max-width: 600px) {
+  .message-modal {
+    width: 95%;
+    top: 10px;
+  }
+  .message-content {
+    font-size: 14px;
+    padding: 10px 15px;
+  }
+}
