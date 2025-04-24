@@ -129,16 +129,11 @@ export class MainPageComponent {
     this.message = null;
   }
 
-  refreshNetWorth(): void {
-    this.fetchUserData();
-  }
 
   refreshUserData(): void {
     this.fetchUserData();
   }
-  handleDataUpdated(): void {
-    this.fetchUserData();
-  }
+
 }
 
 
