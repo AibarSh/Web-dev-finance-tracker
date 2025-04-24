@@ -1,38 +1,30 @@
 <section id="reg-page-section">
-  <form
-    class="reg-form"
-    [formGroup]="form"
-    (ngSubmit)="onSubmit()"
-  >
-    <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="currentColor" class="bi bi-cassette" viewBox="0 0 16 16">
-      <path d="M4 8a1 1 0 1 0 0-2 1 1 0 0 0 0 2m9-1a1 1 0 1 1-2 0 1 1 0 0 1 2 0M7 6a1 1 0 0 0 0 2h2a1 1 0 1 0 0-2z"/>
-      <path d="M1.5 2A1.5 1.5 0 0 0 0 3.5v9A1.5 1.5 0 0 0 1.5 14h13a1.5 1.5 0 0 0 1.5-1.5v-9A1.5 1.5 0 0 0 14.5 2zM1 3.5a.5.5 0 0 1 .5-.5h13a.5.5 0 0 1 .5.5v9a.5.5 0 0 1-.5.5h-.691l-1.362-2.724A.5.5 0 0 0 12 10H4a.5.5 0 0 0-.447.276L2.19 13H1.5a.5.5 0 0 1-.5-.5zM11.691 11l1 2H3.309l1-2z"/>
-    </svg>
+  <form class="reg-form" #form="ngForm">
 
     <h1 class="reg-h1">Welcome</h1>
     <h2 class="reg-h2">Create account</h2>
 
     <label class="reg-label">
       Username
-      <input type="text" class="reg-input" formControlName="username" placeholder="Username">
+      <input type="text" class="reg-input" [(ngModel)]="username" name="username" placeholder="Username" required>
     </label>
 
     <label class="reg-label">
       Email
-      <input type="email" class="reg-input" formControlName="email" placeholder="Email">
+      <input type="email" class="reg-input" [(ngModel)]="email" name="email" placeholder="Email" required>
     </label>
 
     <label class="reg-label">
       Password
-      <input type="password" class="reg-input" formControlName="password" placeholder="Password">
+      <input type="password" class="reg-input" [(ngModel)]="password" name="password" placeholder="Password" required>
     </label>
 
     <label class="reg-label">
       Repeat Password
-      <input type="password" class="reg-input" formControlName="password2" placeholder="Repeat Password">
+      <input type="password" class="reg-input" [(ngModel)]="password2" name="password2" placeholder="Repeat Password" required>
     </label>
 
-    <button class="reg-button" type="submit">
+    <button class="reg-button" type="button" (click)="register()" [disabled]="isLoading">
       @if (!isLoading) {
         Register
       } @else {
@@ -41,17 +33,9 @@
     </button>
 
     @if (registrationSuccess) {
-      <div [class]="{
-        'reg-msg-green': true,
-        'reg-msg-red': false
-      }">
-        {{ successMessage }}
-      </div>
-    } @else if (!registrationSuccess && errorMessages.length) {
-      <div [class]="{
-        'reg-msg-green': false,
-        'reg-msg-red': true
-      }">
+      <div class="reg-msg-green">{{ successMessage }}</div>
+    } @else if (errorMessages.length) {
+      <div class="reg-msg-red">
         @for (error of errorMessages; track $index) {
           <span>{{ error }}</span>
         }
