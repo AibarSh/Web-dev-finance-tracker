@@ -87,7 +87,9 @@ canvas {
 .form-actions button[type="button"] {
   background: #ccc;
 }
-
+.transaction-list {
+  margin-top: 10px;
+}
 .transaction-list ul {
   list-style: none;
   padding: 0;
@@ -95,7 +97,7 @@ canvas {
 
 .transaction-list li {
   display: flex;
-  justify-content: space-between;
+  justify-content: center;
   align-items: center;
   padding: 10px 0;
   border-bottom: 1px solid #eee;

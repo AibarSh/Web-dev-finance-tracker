@@ -17,16 +17,16 @@
       <span>{{ goal.name }}</span>
       <progress [value]="goal.current_amount" [max]="goal.target_amount"></progress>
       <span>${{ goal.current_amount | number:'1.2-2' }} / ${{ goal.target_amount | number:'1.2-2' }}</span>
-      <button (click)="editGoal(goal)">Edit</button>
-      <button (click)="deleteGoal(goal.id)">Delete</button>
+      <button class="edit-btn" (click)="editGoal(goal)">Edit</button>
+      <button class = "delete-btn"(click)="deleteGoal(goal.id)">Delete</button>
     </div>
     <div class="transactions" *ngIf="goal.goal_transactions && goal.goal_transactions.length > 0">
       <h4>Transactions</h4>
       <ul>
         <li *ngFor="let tx of goal.goal_transactions">
           {{ tx.date | date:'short' }}: ${{ tx.amount | number:'1.2-2' }} - {{ tx.description }}
-          <button (click)="editTransaction(tx)">Edit</button>
-          <button (click)="deleteTransaction(tx.id)">Delete</button>
+          <button class="edit-btn" (click)="editTransaction(tx)">Edit</button>
+          <button class ="delete-btn"(click)="deleteTransaction(tx.id)">Delete</button>
         </li>
       </ul>
     </div>

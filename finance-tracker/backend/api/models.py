@@ -3,7 +3,7 @@ from django.conf import settings
 from datetime import date
 from django.utils import timezone
 from django.contrib.auth.models import AbstractBaseUser, BaseUserManager, PermissionsMixin
-
+from django.db.models import Sum
 
 
 class CustomUserManager(BaseUserManager):
@@ -47,7 +47,7 @@ class User(AbstractBaseUser, PermissionsMixin):
     
 class UserSession(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
-    token = models.CharField(max_length=255)
+    token = models.CharField(max_length=500)
     login_time = models.DateTimeField(default=timezone.now)
     logout_time = models.DateTimeField(null=True, blank=True)
     is_active = models.BooleanField(default=True)
@@ -56,7 +56,7 @@ class UserSession(models.Model):
         return f"{self.user.username} - {self.login_time}"
     
 
-from django.db.models import Sum
+
 
 # Model for Net Worth assets
 class Asset(models.Model):

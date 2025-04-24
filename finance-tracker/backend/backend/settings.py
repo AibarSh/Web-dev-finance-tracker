@@ -43,6 +43,7 @@ INSTALLED_APPS = [
     'rest_framework',
     'rest_framework.authtoken',
     'rest_framework_simplejwt',	
+    'rest_framework_simplejwt.token_blacklist',
     'api',
     
     
@@ -148,16 +149,16 @@ REST_FRAMEWORK = {
 
 SIMPLE_JWT = {
     # Access token lifetime (set to 30 days for convenience)
-    'ACCESS_TOKEN_LIFETIME': timedelta(days=30),
+    'ACCESS_TOKEN_LIFETIME': timedelta(minutes=1),
     
     # Refresh token lifetime (set to 90 days)
-    'REFRESH_TOKEN_LIFETIME': timedelta(days=90),
+    'REFRESH_TOKEN_LIFETIME': timedelta(days=5),
     
     # Whether to allow refresh tokens to generate new access tokens
-    'ROTATE_REFRESH_TOKENS': False,
+    'ROTATE_REFRESH_TOKENS': True,
     
     # Whether to blacklist old refresh tokens after rotation
-    'BLACKLIST_AFTER_ROTATION': False,
+    'BLACKLIST_AFTER_ROTATION': True,
     
     # Algorithm for signing tokens
     'ALGORITHM': 'HS256',

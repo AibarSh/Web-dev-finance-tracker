@@ -6,6 +6,7 @@ import { inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { UserFinanceData, NetWorth, Goal,GoalTransaction,Transaction} from '../../../user-interfaces/user-interfaces.interface';
 import { BudgetComponent } from "./budget/budget.component";
+import { Subscription } from 'rxjs';
 @Component({
   selector: 'app-dashboard',
   standalone: true,
@@ -21,14 +22,26 @@ export class MainPageComponent {
   userData: UserFinanceData | null = null;
   username: string = ""; // Default value
   totalNetWorth: number = 0;
+  message: { text: string; type: 'success' | 'error' } | null = null;
+  private logoutSubscription: Subscription | null = null;
 
   ngOnInit() {
+    this.logoutSubscription = this.authService.logoutMessage.subscribe(message => {
+      this.showMessage(message.text, message.type);
+    });
     // Wait for token availability before making the request
     if (this.authService.isAuthenticated()) {
       // Delay fetching user data to ensure token is available
       this.fetchUserData();
+
     } else {
       console.log('No token available yet');
+    }
+  }
+
+  ngOnDestroy(): void {
+    if (this.logoutSubscription) {
+      this.logoutSubscription.unsubscribe();
     }
   }
 
@@ -100,6 +113,20 @@ export class MainPageComponent {
     } else {
       this.totalNetWorth = 0;
     }
+  }
+
+  logout(): void {
+    this.authService.logout();
+  }
+
+
+  showMessage(text: string, type: 'success' | 'error'): void {
+    this.message = { text, type };
+    setTimeout(() => this.clearMessage(), 5000);
+  }
+
+  clearMessage(): void {
+    this.message = null;
   }
 
   refreshNetWorth(): void {

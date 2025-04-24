@@ -103,13 +103,33 @@ canvas {
   padding: 0;
 }
 
-.asset-list li {
+.asset-row p {
+  margin: 0;
+
+}
+
+.button-group {
+  display: flex;
+  gap: 8px; /* space between buttons */
+  margin-left: 5px;
+}
+
+.asset-row {
   display: flex;
   justify-content: space-between;
+  align-items: center;
+
+}
+
+.asset-list li {
+  display: flex;
+  justify-content: flex-end;
   align-items: center;
   padding: 10px;
   border-bottom: 1px solid #eee;
 }
+
+
 
 .asset-list li button {
   padding: 5px 10px;

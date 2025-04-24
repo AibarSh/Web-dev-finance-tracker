@@ -31,7 +31,7 @@ export const authTokenInterceptorFn : HttpInterceptorFn = (
 
   return next(addTokenToHeaders(req, accessToken)).pipe(
     catchError(err => {
-      if (err.status === 403) {
+      if (err.status === 401 || err.status === 403) {
         return refreshTokenInterceptor(authService, req, next);
       }
 

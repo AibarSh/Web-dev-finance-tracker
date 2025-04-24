@@ -1,6 +1,10 @@
 <div class="container">
   <h1 *ngIf="username">Welcome, {{ username }}!</h1>
 
+  <button class = "account-button logout-button" (click) = "logout()">
+    <span>Logout</span>
+  </button>
+
 
     <div class="cards">
 
@@ -25,4 +29,13 @@
       <p>Your income and expenses over time</p>
       <app-bar-chart [transactions]="userData?.transactions ?? []" (transactionsUpdated) = "refreshUserData()"></app-bar-chart>
     </div>
-  </div>
+
+
+    <!-- Message modal -->
+    <div class="message-modal" *ngIf="message" [ngClass]="{'success': message.type === 'success', 'error': message.type === 'error'}">
+      <div class="message-content">
+        <span>{{ message.text }}</span>
+        <button class="close-button" (click)="clearMessage()">×</button>
+      </div>
+    </div>
+</div>

@@ -17,6 +17,17 @@
   color: white;
   padding: 1rem;
   border-radius: 10px;
+  max-width: fit-content;
+}
+
+.transactions ul {
+  list-style: none;
+}
+.transactions li {
+  margin-bottom: 4px;
+}
+.transactions h4 {
+  margin-top: 4px;
 }
 
 .budget-item {
@@ -81,6 +92,35 @@ label {
 .form-actions button:hover {
   background-color: #555;
 }
+
+.edit-btn {
+  background-color: #007bff; /* Bootstrap blue */
+  color: white;
+  border: none;
+  padding: 2px 4px;
+  border-radius: 4px;
+  cursor: pointer;
+  margin-left: 4px;
+}
+
+.edit-btn:hover {
+  background-color: #0056b3;
+}
+
+.delete-btn {
+  background-color: #dc3545; /* Bootstrap red */
+  color: white;
+  border: none;
+  padding: 2px 4px;
+  border-radius: 4px;
+  cursor: pointer;
+  margin-left: 3px;
+}
+
+.delete-btn:hover {
+  background-color: #a71d2a;
+}
+
 
 
 /* Message Modal Styles */

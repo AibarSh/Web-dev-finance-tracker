@@ -4,6 +4,7 @@
   padding: 20px;
   align-items:center;
   justify-items: center;
+  position:relative;
 }
 
 h1 {
@@ -111,4 +112,54 @@ h1 {
   h1 {
     font-size: 24px;
   }
+}
+
+
+.logout-button {
+  position:absolute;
+  right: 30px;
+  top: 0;
+}
+
+.account-button {
+  background-color: transparent;
+  color: white;
+  border: 2px solid transparent;
+  font-size: 18px;
+  height: 56px;
+  padding: 0 24px;
+  text-transform: uppercase;
+  border-radius: 28px;
+  transition: all 0.3s ease-in-out;
+
+}
+
+.account-button span {
+  z-index: 1;
+}
+
+/* Hover Effect for Buttons */
+.account-button:hover {
+  cursor: pointer;
+  background-color: var(--primary);
+  color: var(--dark);
+  border-color: var(--primary);
+}
+
+/* Active state animation for buttons */
+.account-button:active {
+  transform: scale(0.98);
+}
+
+:root {
+  --dark-secondary: #2d2d2d;
+  --dark: #1c1c1c;
+  --primary: #3a8dff;
+  --secondary: #ff6347;
+  --primary-light: #a2c8ff;
+  --white: #ffffff;
+  --dark-background: #121212;
+  --light-background: #f4f4f4;
+  --light: #ffffff;
+  --dark-secondary-hover: #444444;
 }

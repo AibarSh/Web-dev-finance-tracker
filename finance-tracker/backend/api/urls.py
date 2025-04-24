@@ -1,7 +1,7 @@
 from django.urls import path, include
 from rest_framework.routers import DefaultRouter
 from .views import RegisterView, LoginView, LogoutView, AssetViewSet, TransactionViewSet, GoalViewSet, GoalTransactionViewSet, full_user_data
-
+from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
 router = DefaultRouter()
 router.register(r'assets', AssetViewSet)
 router.register(r'transactions', TransactionViewSet)
@@ -13,6 +13,8 @@ urlpatterns = [
     path('register/', RegisterView.as_view(), name='register'),
     path('login/', LoginView.as_view(), name='login'),
     path('logout/', LogoutView.as_view(), name='logout'),
+    path('token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
+    path('token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
     path('user-full-data/', full_user_data, name='user-full-data'),
 
 ]

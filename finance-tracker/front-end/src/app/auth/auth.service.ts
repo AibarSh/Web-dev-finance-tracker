@@ -1,5 +1,5 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { inject, Injectable } from '@angular/core';
+import { inject, Injectable,EventEmitter } from '@angular/core';
 import { Observable, catchError, tap, throwError } from 'rxjs';
 import { TokenResponse, UserLogin, UserRegistration } from './auth.interface';
 import { UserFinanceData} from '../user-interfaces/user-interfaces.interface';
@@ -19,7 +19,7 @@ export class AuthService {
   apiUrl: string = 'http://127.0.0.1:8000/api/';
   accessToken: string | null = '';
   refreshToken: string | null = '';
-
+  logoutMessage = new EventEmitter<{ text: string, type: 'success' | 'error' }>();
   registered: boolean = false;
 
   getUserData(): Observable<UserFinanceData> {
@@ -92,14 +92,40 @@ export class AuthService {
     );
   }
 
-  logout() {
-    this.http.post(`${this.apiUrl}token/logout/`, {
-      refresh: this.refreshToken
-    }).subscribe(); // Не важно, что вернёт сервер, но это для завершения сессии
+  logout(): void {
+    const headers = {
+      Authorization: `Bearer ${this.accessToken}`
+    };
 
-    this.cookie.deleteAll();
+    // Send refresh token in body if available
+    const body = this.refreshToken ? { refresh: this.refreshToken } : {};
+
+    this.http.post(`${this.apiUrl}logout/`, body,{ headers })
+      .subscribe({
+        next: (response: any) => {
+          this.logoutMessage.emit({ text: response.message || 'Successfully logged out', type: 'success' });
+          this.completeLogout();
+        },
+        error: (err) => {
+          this.logoutMessage.emit({
+            text: err.error?.error || 'Failed to log out. Please try again.',
+            type: 'error'
+          });
+          this.completeLogout(); // Proceed to clear client-side data even if server fails
+        }
+      });
+  }
+
+  private completeLogout(): void {
+    // Clear specific cookies
+    this.cookie.delete('accessToken');
+    this.cookie.delete('refreshToken');
+
+    // Clear tokens
     this.accessToken = null;
     this.refreshToken = null;
+
+    // Redirect to login
     this.router.navigate(['/login']);
   }
 

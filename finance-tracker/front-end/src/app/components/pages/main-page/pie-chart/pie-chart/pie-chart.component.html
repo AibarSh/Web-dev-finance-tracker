@@ -37,9 +37,13 @@
     <h3>Current Assets</h3>
     <ul>
       <li *ngFor="let asset of netWorth">
-        {{ asset.name }}: ${{ asset.value | number:'1.2-2' }}
-        <button (click)="editAsset(asset)">Edit</button>
-        <button (click)="deleteAsset(asset.id)">Delete</button>
+      <div class="asset-row">
+          <p>{{ asset.name }}: ${{ asset.value | number:'1.2-2' }}</p>
+        <div class="button-group">
+          <button (click)="editAsset(asset)">Edit</button>
+          <button (click)="deleteAsset(asset.id)">Delete</button>
+        </div>
+      </div>
       </li>
     </ul>
   </div>

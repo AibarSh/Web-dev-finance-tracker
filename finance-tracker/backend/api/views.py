@@ -1,13 +1,10 @@
 from django.shortcuts import render
-from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
 from rest_framework_simplejwt.tokens import RefreshToken
 from django.urls import path
 from django.contrib.auth import authenticate
 from .serializers import  UserSerializer
 from rest_framework.exceptions import ValidationError
 from rest_framework.decorators import action
-
-
 from rest_framework import viewsets, generics, status, permissions
 from rest_framework.generics import GenericAPIView
 from rest_framework.permissions import IsAuthenticated
@@ -19,10 +16,11 @@ from .serializers import AssetSerializer, TransactionSerializer, GoalSerializer,
 from .serializers import LoginSerializer, FullUserSerializer
 from django.utils import timezone
 
-urlpatterns = [
-    path('api/token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
-    path('api/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
-]
+import logging
+
+logger = logging.getLogger(__name__)
+
+
 
 class RegisterView(generics.CreateAPIView):
     serializer_class = UserSerializer
@@ -63,18 +61,27 @@ class LoginView(GenericAPIView):
             refresh_token = str(refresh)
             
             # Save login session
-            UserSession.objects.create(
-                user=user,
-                token=access_token,
-                login_time=timezone.now(),
-                is_active=True
-            )
+            try:
+                UserSession.objects.create(
+                    user=user,
+                    token=access_token,
+                    login_time=timezone.now(),
+                    is_active=True
+                )
+                logger.info(f"Created UserSession for user {user.username}, token: {access_token[:10]}...")
+            except Exception as e:
+                logger.error(f"Failed to create UserSession for {user.username}: {str(e)}")
+                return Response({
+                    "error": f"Failed to create session: {str(e)}"
+                }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
             
+            logger.info(f"User {user.username} logged in successfully")
             return Response({
                 'access': access_token,
                 'refresh': refresh_token,
             }, status=status.HTTP_200_OK)
         else:
+            logger.warning(f"Failed login attempt with email: {email}")
             return Response({
                 'error': 'Invalid credentials'
             }, status=status.HTTP_401_UNAUTHORIZED)
@@ -84,25 +91,42 @@ class LogoutView(APIView):
 
     def post(self, request):
         try:
-            # Get user's active session
-            session = UserSession.objects.get(
-                user=request.user,
-                token=request.auth.key,
-                is_active=True
-            )
-            # Update session
-            session.logout_time = timezone.now()
-            session.is_active = False
-            session.save()
-            
-            # Delete token
-            request.auth.delete()
-            
-            return Response({"message": "Successfully logged out"}, 
-                          status=status.HTTP_200_OK)
-        except UserSession.DoesNotExist:
-            return Response({"error": "No active session found"}, 
-                          status=status.HTTP_400_BAD_REQUEST)
+            # Update UserSession if it exists
+            try:
+                session = UserSession.objects.get(
+                    user=request.user,
+                    token=str(request.auth),
+                    is_active=True
+                )
+                session.logout_time = timezone.now()
+                session.is_active = False
+                session.save()
+                logger.info(f"Updated UserSession for user {request.user.username}")
+            except UserSession.DoesNotExist:
+                logger.warning(f"No active UserSession found for user {request.user.username}")
+
+            # Optionally blacklist refresh token
+            refresh_token = request.data.get('refresh')
+            if refresh_token:
+                try:
+                    token = RefreshToken(refresh_token)
+                    token.blacklist()
+                    logger.info(f"Blacklisted refresh token for user {request.user.username}")
+                except Exception as e:
+                    logger.error(f"Failed to blacklist refresh token: {str(e)}")
+                    return Response({
+                        "error": f"Invalid refresh token: {str(e)}"
+                    }, status=status.HTTP_400_BAD_REQUEST)
+
+            logger.info(f"User {request.user.username} logged out successfully")
+            return Response({
+                "message": "Successfully logged out"
+            }, status=status.HTTP_200_OK)
+        except Exception as e:
+            logger.error(f"Logout failed for user {request.user.username}: {str(e)}")
+            return Response({
+                "error": f"Logout failed: {str(e)}"
+            }, status=status.HTTP_400_BAD_REQUEST)
         
 
 

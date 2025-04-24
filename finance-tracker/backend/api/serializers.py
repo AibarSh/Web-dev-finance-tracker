@@ -1,10 +1,30 @@
 from rest_framework import serializers
 from .models import User, Goal, Transaction, GoalTransaction, Asset
-
+from django.contrib.auth import authenticate
+from rest_framework.validators import UniqueValidator
 
 class UserSerializer(serializers.ModelSerializer):
     password = serializers.CharField(write_only=True)
-    email = serializers.EmailField(required=True)
+    
+    email = serializers.EmailField(
+        required=True,
+        validators=[
+            UniqueValidator(
+                queryset=User.objects.all(),
+                message="This email is already registered."
+            )
+        ]
+    )
+
+    username = serializers.CharField(
+        required=True,
+        validators=[
+            UniqueValidator(
+                queryset=User.objects.all(),
+                message="This username is already taken."
+            )
+        ]
+    )
 
     class Meta:
         model = User
@@ -20,8 +40,22 @@ class UserSerializer(serializers.ModelSerializer):
         return user
 
 class LoginSerializer(serializers.Serializer):
-    email = serializers.EmailField()
-    password = serializers.CharField(style={'input_type': 'password'})
+    email = serializers.EmailField(required=True)
+    password = serializers.CharField(required=True, write_only=True)
+
+    def validate(self, data):
+        email = data.get('email')
+        password = data.get('password')
+        
+        if email and password:
+            user = authenticate(request=self.context.get('request'), 
+                             email=email, password=password)
+            if not user:
+                raise serializers.ValidationError("Invalid credentials")
+            data['user'] = user
+        else:
+            raise serializers.ValidationError("Email and password are required")
+        return data
 
 class AssetSerializer(serializers.ModelSerializer):
     class Meta:
