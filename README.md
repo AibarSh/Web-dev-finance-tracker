@@ -25,10 +25,10 @@ Ensure you have the following installed on your system:
 
 ## 🖥 Backend (Django)
 ### 1️⃣ Clone the Repository
-``sh
+```sh
 git clone https://github.com/AibarSh/Web-dev-finance-tracker
 cd Web-dev-finance-tracker
-``
+```
 
 
 ### 2️⃣ Set Up a Virtual Environment
