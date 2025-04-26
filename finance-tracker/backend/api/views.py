@@ -130,17 +130,60 @@ class LogoutView(APIView):
         
 
 
-class AssetViewSet(viewsets.ModelViewSet):
-    queryset = Asset.objects.all()
-    serializer_class = AssetSerializer
-    permission_classes = [permissions.IsAuthenticated]
-    http_method_names = ['get', 'post', 'patch', 'delete']
+# class AssetViewSet(viewsets.ModelViewSet):
+#     queryset = Asset.objects.all()
+#     serializer_class = AssetSerializer
+#     permission_classes = [permissions.IsAuthenticated]
+#     http_method_names = ['get', 'post', 'patch', 'delete']
 
-    def get_queryset(self):
-        return Asset.objects.filter(user=self.request.user)
+#     def get_queryset(self):
+#         return Asset.objects.filter(user=self.request.user)
 
-    def perform_create(self, serializer):
-        serializer.save(user=self.request.user)
+#     def perform_create(self, serializer):
+#         serializer.save(user=self.request.user)
+
+@api_view(['GET', 'POST'])
+@permission_classes([IsAuthenticated])
+def asset_list_create(request):
+    if request.method == 'GET':
+        # List all assets for the authenticated user
+        assets = Asset.objects.filter(user=request.user)
+        serializer = AssetSerializer(assets, many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
+    elif request.method == 'POST':
+        # Create a new asset for the authenticated user
+        serializer = AssetSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save(user=request.user)
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+@api_view(['GET', 'PATCH', 'DELETE'])
+@permission_classes([IsAuthenticated])
+def asset_detail(request, pk):
+    try:
+        # Retrieve the asset for the authenticated user
+        asset = Asset.objects.get(pk=pk, user=request.user)
+    except Asset.DoesNotExist:
+        return Response({'error': 'Asset not found'}, status=status.HTTP_404_NOT_FOUND)
+
+    if request.method == 'GET':
+        # Retrieve a single asset
+        serializer = AssetSerializer(asset)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+    elif request.method == 'PATCH':
+        # Update an existing asset
+        serializer = AssetSerializer(asset, data=request.data, partial=True)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_200_OK)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+    elif request.method == 'DELETE':
+        # Delete an asset
+        asset.delete()
+        return Response({'message': 'Asset deleted successfully'}, status=status.HTTP_204_NO_CONTENT)
 
 
 class TransactionViewSet(viewsets.ModelViewSet):

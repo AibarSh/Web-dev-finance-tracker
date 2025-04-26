@@ -69,10 +69,27 @@ class TransactionSerializer(serializers.ModelSerializer):
         fields = ['id', 'date', 'amount', 'type', 'category', 'description']
         read_only_fields = ['id']
 
-class GoalTransactionSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = GoalTransaction
-        fields = '__all__'
+# class GoalTransactionSerializer(serializers.ModelSerializer):
+#     class Meta:
+#         model = GoalTransaction
+#         fields = '__all__'
+class GoalTransactionSerializer(serializers.Serializer):
+    id = serializers.IntegerField(read_only=True)
+    goal = serializers.PrimaryKeyRelatedField(queryset=Goal.objects.all())
+    amount = serializers.DecimalField(max_digits=15, decimal_places=2)
+    # date = serializers.DateField()
+    # description = serializers.CharField(allow_blank=True, required=False)
+
+    def create(self, validated_data):
+        # Create a new GoalTransaction instance
+        return GoalTransaction.objects.create(**validated_data)
+
+    def update(self, instance, validated_data):
+        # Update an existing GoalTransaction instance
+        instance.goal = validated_data.get('goal', instance.goal)
+        instance.amount = validated_data.get('amount', instance.amount)
+        instance.save()
+        return instance
         
 class GoalSerializer(serializers.ModelSerializer):
     current_amount = serializers.DecimalField(source='get_current_amount', max_digits=15, decimal_places=2, read_only=True)
